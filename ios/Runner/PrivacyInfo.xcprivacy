@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<privacy>
+   <usage type="network" purpose="Push Notifications and Internet Connectivity" />
+  <usage type="contacts" purpose="Fetch Contacts for sharing" />
+  <usage type="camera" purpose="Image Picker Camera Access" />
+  <usage type="microphone" purpose="Audio Recording (if needed)" />
+</privacy>

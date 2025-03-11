@@ -213,7 +213,6 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
     return Scaffold(
       body: SingleChildScrollView(
         child: (blockListData.isEmpty ||
-                thicknesslistdata.isEmpty ||
                 productListData.isEmpty ||
                 categorylistdata.isEmpty ||
                 slablistdata.isEmpty)
@@ -372,57 +371,49 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
                           ),
                         ),
                         5.height,
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width -
-                                    42, //-130
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: CustomSearchableDropDown(
-                                  dropdownHintText:
-                                      ' Search for product here... ',
-                                  showLabelInMenu: true,
-                                  dropdownItemStyle:
-                                      const TextStyle(color: kPrimaryColor),
-                                  primaryColor: kPrimaryColor,
-                                  menuMode: true,
-                                  labelStyle: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold),
-                                  items: productListData.toList(),
-                                  label: ' Select Product',
-                                  prefixIcon: const Icon(Icons.search),
-                                  dropDownMenuItems:
-                                      productListData.map((item) {
-                                            return item;
-                                            // return item.split(" ###@@@###SB###@@@### ")[0];
-                                          }).toList() ??
-                                          [],
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        // print(value.split(" ###@@@###SB###@@@### ")[1]);
-                                        // productSelected = value.split(" ###@@@###SB###@@@### ")[1];
-                                        productSelected = value.toString();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        productSelected = null;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Container(
+                            width:
+                                MediaQuery.of(context).size.width - 42, //-130
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: CustomSearchableDropDown(
+                              dropdownHintText: ' Search for product here... ',
+                              showLabelInMenu: true,
+                              dropdownItemStyle:
+                                  const TextStyle(color: kPrimaryColor),
+                              primaryColor: kPrimaryColor,
+                              menuMode: true,
+                              labelStyle: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
+                              items: productListData.toList(),
+                              label: ' Select Product',
+                              prefixIcon: const Icon(Icons.search),
+                              dropDownMenuItems: productListData.map((item) {
+                                    return item;
+                                    // return item.split(" ###@@@###SB###@@@### ")[0];
+                                  }).toList() ??
+                                  [],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    // print(value.split(" ###@@@###SB###@@@### ")[1]);
+                                    // productSelected = value.split(" ###@@@###SB###@@@### ")[1];
+                                    productSelected = value.toString();
+                                  });
+                                } else {
+                                  setState(() {
+                                    productSelected = null;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -432,7 +423,7 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
                           child: Text(
                             'Block',
                             style: primaryTextStyle(
@@ -440,62 +431,55 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
                           ),
                         ),
                         5.height,
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width -
-                                    42, //- 130
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: CustomSearchableDropDown(
-                                  dropdownHintText:
-                                      ' Search for block here... ',
-                                  showLabelInMenu: true,
-                                  dropdownItemStyle:
-                                      const TextStyle(color: kPrimaryColor),
-                                  primaryColor: kPrimaryColor,
-                                  menuMode: true,
-                                  labelStyle: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold),
-                                  items: blockListData.toList(),
-                                  label: ' Select Block',
-                                  prefixIcon: const Icon(Icons.search),
-                                  dropDownMenuItems: blockListData.map((item) {
-                                        // return item.split(" ###@@@###SB###@@@### ")[0];
-                                        return item;
-                                      }).toList() ??
-                                      [],
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        // print(value.split(" ###@@@###SB###@@@### ")[1]);
-                                        // blockSelected = value.split(" ###@@@###SB###@@@### ")[1];
-                                        blockSelected = value.toString();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        blockSelected = null;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Container(
+                            width:
+                                MediaQuery.of(context).size.width - 42, //- 130
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: CustomSearchableDropDown(
+                              dropdownHintText: ' Search for block here... ',
+                              showLabelInMenu: true,
+                              dropdownItemStyle:
+                                  const TextStyle(color: kPrimaryColor),
+                              primaryColor: kPrimaryColor,
+                              menuMode: true,
+                              labelStyle: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
+                              items: blockListData.toList(),
+                              label: ' Select Block',
+                              prefixIcon: const Icon(Icons.search),
+                              dropDownMenuItems: blockListData.map((item) {
+                                    // return item.split(" ###@@@###SB###@@@### ")[0];
+                                    return item;
+                                  }).toList() ??
+                                  [],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    // print(value.split(" ###@@@###SB###@@@### ")[1]);
+                                    // blockSelected = value.split(" ###@@@###SB###@@@### ")[1];
+                                    blockSelected = value.toString();
+                                  });
+                                } else {
+                                  setState(() {
+                                    blockSelected = null;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
                     16.height,
                     Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -506,58 +490,50 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
                                 size: 14, color: kPrimaryColor),
                           ),
                           5.height,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                // width: MediaQuery.of(context).size.width*0.9,//0.7
-                                width: MediaQuery.of(context).size.width - 42,
-                                // alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: CustomSearchableDropDown(
-                                  dropdownHintText:
-                                      ' Search for category here... ',
-                                  showLabelInMenu: true,
-                                  dropdownItemStyle:
-                                      const TextStyle(color: kPrimaryColor),
-                                  primaryColor: kPrimaryColor,
-                                  menuMode: true,
-                                  labelStyle: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold),
-                                  items: categorylistdata.toList(),
-                                  label: ' Select Category',
-                                  prefixIcon: const Icon(Icons.search),
-                                  dropDownMenuItems:
-                                      categorylistdata.map((item) {
-                                            return item;
-                                          }).toList() ??
-                                          [],
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        categorySelected = value.toString();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        categorySelected = null;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
+                          Container(
+                            // width: MediaQuery.of(context).size.width*0.9,//0.7
+                            width: MediaQuery.of(context).size.width - 42,
+                            // alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: CustomSearchableDropDown(
+                              dropdownHintText: ' Search for category here... ',
+                              showLabelInMenu: true,
+                              dropdownItemStyle:
+                                  const TextStyle(color: kPrimaryColor),
+                              primaryColor: kPrimaryColor,
+                              menuMode: true,
+                              labelStyle: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
+                              items: categorylistdata.toList(),
+                              label: ' Select Category',
+                              prefixIcon: const Icon(Icons.search),
+                              dropDownMenuItems: categorylistdata.map((item) {
+                                    return item;
+                                  }).toList() ??
+                                  [],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    categorySelected = value.toString();
+                                  });
+                                } else {
+                                  setState(() {
+                                    categorySelected = null;
+                                  });
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),
                     ),
                     16.height,
                     Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -568,55 +544,49 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
                                 size: 14, color: kPrimaryColor),
                           ),
                           5.height,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width - 42,
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: CustomSearchableDropDown(
-                                  dropdownHintText: ' Search for slab here... ',
-                                  showLabelInMenu: true,
-                                  dropdownItemStyle:
-                                      const TextStyle(color: kPrimaryColor),
-                                  primaryColor: kPrimaryColor,
-                                  menuMode: true,
-                                  labelStyle: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold),
-                                  items: slablistdata.toList(),
-                                  label: ' Select Slab',
-                                  prefixIcon: const Icon(Icons.search),
-                                  dropDownMenuItems: slablistdata.map((item) {
-                                        return item;
-                                      }).toList() ??
-                                      [],
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        slabSelected = value.toString();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        slabSelected = null;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
+                          Container(
+                            width: MediaQuery.of(context).size.width - 42,
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: CustomSearchableDropDown(
+                              dropdownHintText: ' Search for slab here... ',
+                              showLabelInMenu: true,
+                              dropdownItemStyle:
+                                  const TextStyle(color: kPrimaryColor),
+                              primaryColor: kPrimaryColor,
+                              menuMode: true,
+                              labelStyle: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
+                              items: slablistdata.toList(),
+                              label: ' Select Slab',
+                              prefixIcon: const Icon(Icons.search),
+                              dropDownMenuItems: slablistdata.map((item) {
+                                    return item;
+                                  }).toList() ??
+                                  [],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    slabSelected = value.toString();
+                                  });
+                                } else {
+                                  setState(() {
+                                    slabSelected = null;
+                                  });
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),
                     ),
                     16.height,
                     Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -627,51 +597,44 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
                                 size: 14, color: kPrimaryColor),
                           ),
                           5.height,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width - 42,
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: CustomSearchableDropDown(
-                                  dropdownHintText:
-                                      ' Search for slab thickness here... ',
-                                  showLabelInMenu: true,
-                                  dropdownItemStyle:
-                                      const TextStyle(color: kPrimaryColor),
-                                  primaryColor: kPrimaryColor,
-                                  menuMode: true,
-                                  labelStyle: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold),
-                                  items: thicknesslistdata.toList(),
-                                  label: ' Select Slab Thickness',
-                                  prefixIcon: const Icon(Icons.search),
-                                  dropDownMenuItems:
-                                      thicknesslistdata.map((item) {
-                                            return item;
-                                          }).toList() ??
-                                          [],
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        print(value.toString());
-                                        thicknessSelected = value.toString();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        thicknessSelected = null;
-                                      });
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
+                          Container(
+                            width: MediaQuery.of(context).size.width - 42,
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: CustomSearchableDropDown(
+                              dropdownHintText:
+                                  ' Search for slab thickness here... ',
+                              showLabelInMenu: true,
+                              dropdownItemStyle:
+                                  const TextStyle(color: kPrimaryColor),
+                              primaryColor: kPrimaryColor,
+                              menuMode: true,
+                              labelStyle: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
+                              items: thicknesslistdata.toList(),
+                              label: ' Select Slab Thickness',
+                              prefixIcon: const Icon(Icons.search),
+                              dropDownMenuItems: thicknesslistdata.map((item) {
+                                    return item;
+                                  }).toList() ??
+                                  [],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    print(value.toString());
+                                    thicknessSelected = value.toString();
+                                  });
+                                } else {
+                                  // setState(() {
+                                  //   thicknessSelected = null;
+                                  // });
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),

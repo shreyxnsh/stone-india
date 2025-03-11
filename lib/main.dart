@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:stoneindia/firebase_options.dart';
 import 'package:stoneindia/screen/splash.dart';
 import 'package:stoneindia/utils/local_notifacation_service.dart';
+import 'package:stoneindia/utils/restapi.dart';
 import 'contants.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   if (message.notification != null) {
@@ -18,13 +22,76 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   }
 }
 
+Future<void> requestTrackingPermission() async {
+  final status = await AppTrackingTransparency.requestTrackingAuthorization();
+  print("Tracking Permission: $status");
+
+  // if (await AppTrackingTransparency.trackingAuthorizationStatus ==
+  //     TrackingStatus.notDetermined) {
+  //   // Show a custom explainer dialog before the system dialog
+  //   await showCustomTrackingDialog(context);
+  //   // Wait for dialog popping animation
+  //   await Future.delayed(const Duration(milliseconds: 200));
+  //   // Request system's tracking authorization dialog
+  //   await AppTrackingTransparency.requestTrackingAuthorization();
+  // }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  log(FirebaseAuth.instance.currentUser.toString());
+
+  await requestTrackingPermission();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   LocalNotificationService.initialize();
+
   await initialize();
   await initPlatformState();
+  Map req = {
+    'whatsapp_number': "911111111110",
+    'fcm_token': "",
+    'country_code': "91",
+    'country_iso_code': "IN",
+  };
+  await login(req).then((value) async {
+    if (value["status"] == true &&
+        value["messages"] == "Login successfully!" &&
+        value['role'] == "customer") {
+      setValue(USER_ID, value["data"]["id"]);
+      setValue(FIRST_NAME, value["data"]["firstname"]);
+      setValue(LAST_NAME, value["data"]["lastname"]);
+      setValue(USER_MOBILE, value["data"]["whatsapp_number"]);
+      setValue(USER_ROLE, value["data"]["role"]);
+      setValue(USER_DISPLAY_NAME,
+          value["data"]["firstname"] + " " + value["data"]["lastname"]);
+      if (value["data"]["profile_img"] != null) {
+        setValue(PROFILE_IMAGE, value["data"]["profile_img"]);
+      }
+      // if(isfirst == true){
+
+      // toast('Login Successfully');
+    } else if (value["status"] == true &&
+        value["messages"] == "Login successfully!" &&
+        value['role'] == "team") {
+      setValue(USER_ID, value["data"]["id"]);
+      setValue(FIRST_NAME, value["data"]["firstname"]);
+      setValue(LAST_NAME, value["data"]["lastname"]);
+      setValue(USER_MOBILE, value["data"]["whatsapp_number"]);
+      setValue(USER_ROLE, value["data"]["role"]);
+      setValue(USER_DISPLAY_NAME,
+          value["data"]["firstname"] + " " + value["data"]["lastname"]);
+      if (value["data"]["profile_img"] != null) {
+        setValue(PROFILE_IMAGE, value["data"]["profile_img"]);
+      }
+
+      // toast('Login Successfully');
+    } else if (value["status"] == false) {
+      toast(value["messages"].toString());
+    } else {}
+  }).catchError((e) {
+    log(e.toString());
+  });
   runApp(const MyApp());
 }
 
@@ -41,6 +108,7 @@ initPlatformState() async {
   } on PlatformException {
     appBadgeSupported = 'Failed to get badge support.';
   }
+
   print(appBadgeSupported);
 }
 

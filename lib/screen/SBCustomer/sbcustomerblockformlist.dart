@@ -28,7 +28,8 @@ class _CustomerBlockFormListWidgetState
   String _image = "";
   bool isloadingblocklist = false;
   List<BlockFormData>? blockformlist;
-  final cs.CarouselController? _controller = cs.CarouselController();
+  final cs.CarouselSliderController? _controller =
+      cs.CarouselSliderController();
   bool isWhatsappApi = false;
 
   @override
@@ -81,6 +82,11 @@ class _CustomerBlockFormListWidgetState
                             GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onLongPress: () {
+                                  if (!getBoolAsync(IS_LOGGED_IN)) {
+                                    toast(
+                                        "Please login to view block form details");
+                                    return;
+                                  }
                                   print('Long Press Begin');
                                   setState(() {
                                     is_long_press = true;
@@ -91,6 +97,11 @@ class _CustomerBlockFormListWidgetState
                                   });
                                 },
                                 onLongPressEnd: (details) {
+                                  if (!getBoolAsync(IS_LOGGED_IN)) {
+                                    toast(
+                                        "Please login to view block form details");
+                                    return;
+                                  }
                                   print('Long Press End');
                                   setState(() {
                                     is_long_press = false;
@@ -102,147 +113,160 @@ class _CustomerBlockFormListWidgetState
                                 },
                                 onTap: () {
                                   print("On Tap");
+                                  if (!getBoolAsync(IS_LOGGED_IN)) {
+                                    toast(
+                                        "Please login to view block form details");
+                                    return;
+                                  }
                                   QuickViewImagesWidget(
                                           blockFormImages: widget
                                               .blockFormData![index].images)
                                       .launch(context);
                                 },
-                                child:
-                                    widget.blockFormData![index].images == null
+                                child: widget.blockFormData![index].images ==
+                                        null
+                                    ? Container()
+                                    : widget.blockFormData![index].images!
+                                            .isEmpty
                                         ? Container()
                                         : widget.blockFormData![index].images!
-                                                .isEmpty
-                                            ? Container()
-                                            : widget.blockFormData![index]
-                                                    .images!.isNotEmpty
-                                                ? SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width -
-                                                            32,
-                                                    child: cs.CarouselSlider
-                                                        .builder(
-                                                      carouselController:
-                                                          _controller,
-                                                      // padding: const EdgeInsets.only(top: 0, bottom: 0, right: 0, left: 0),
-                                                      itemCount: widget
+                                                .isNotEmpty
+                                            ? SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    32,
+                                                child:
+                                                    cs.CarouselSlider.builder(
+                                                  carouselController:
+                                                      _controller,
+                                                  // padding: const EdgeInsets.only(top: 0, bottom: 0, right: 0, left: 0),
+                                                  itemCount: !getBoolAsync(
+                                                          IS_LOGGED_IN)
+                                                      ? 1
+                                                      : widget
                                                           .blockFormData![index]
                                                           .images!
                                                           .length,
-                                                      options:
-                                                          cs.CarouselOptions(
-                                                        // height: MediaQuery.of(context).size.height*0.25,
-                                                        autoPlayInterval:
-                                                            const Duration(
-                                                                seconds: 15),
-                                                        height: 280,
-                                                        autoPlay: true,
-                                                        viewportFraction: 1,
-                                                        initialPage: 1,
-                                                        aspectRatio: 2.0,
-                                                        enlargeCenterPage: true,
-                                                      ),
-                                                      itemBuilder: (context,
-                                                          int indexdata,
-                                                          realIdx) {
-                                                        final int count = widget
-                                                                    .blockFormData![
-                                                                        index]
-                                                                    .images!
-                                                                    .length >
-                                                                10
-                                                            ? 10
-                                                            : widget
+                                                  options: cs.CarouselOptions(
+                                                    // height: MediaQuery.of(context).size.height*0.25,
+                                                    autoPlayInterval:
+                                                        const Duration(
+                                                            seconds: 15),
+                                                    height: 280,
+                                                    autoPlay: true,
+                                                    viewportFraction: 1,
+                                                    initialPage: 1,
+                                                    aspectRatio: 2.0,
+                                                    enlargeCenterPage: true,
+                                                  ),
+                                                  itemBuilder: (context,
+                                                      int indexdata, realIdx) {
+                                                    final int count = widget
                                                                 .blockFormData![
                                                                     index]
                                                                 .images!
-                                                                .length;
-                                                        return ListView(
-                                                            scrollDirection:
-                                                                Axis.horizontal,
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const NeverScrollableScrollPhysics(),
-                                                            children: [
-                                                              Center(
-                                                                child: widget
-                                                                            .blockFormData![
-                                                                                index]
-                                                                            .images![
-                                                                                indexdata]
-                                                                            .image
-                                                                            .validate()
-                                                                            .contains(
-                                                                                '.mp4') ||
-                                                                        widget
-                                                                            .blockFormData![
-                                                                                index]
-                                                                            .images![
-                                                                                indexdata]
-                                                                            .image
-                                                                            .validate()
-                                                                            .contains(
-                                                                                '.MP4') ||
-                                                                        widget
-                                                                            .blockFormData![
-                                                                                index]
-                                                                            .images![
-                                                                                indexdata]
-                                                                            .image
-                                                                            .validate()
-                                                                            .contains(
-                                                                                '.MOV') ||
-                                                                        widget
-                                                                            .blockFormData![
-                                                                                index]
-                                                                            .images![
-                                                                                indexdata]
-                                                                            .image
-                                                                            .validate()
-                                                                            .contains(
-                                                                                '.mov')
-                                                                    ? IgnorePointer(
-                                                                        child:
-                                                                            SizedBox(
-                                                                        height:
-                                                                            300,
-                                                                        width: MediaQuery.of(context).size.width -
-                                                                            50,
-                                                                        child:
-                                                                            CachedVideoWidget(
-                                                                          url: widget.blockFormData![index].images![indexdata].image.validate() ??
-                                                                              '',
-                                                                          height:
-                                                                              300,
-                                                                          width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width,
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          radius:
-                                                                              1,
-                                                                        ),
-                                                                      ))
-                                                                    : CachedImageWidget(
-                                                                        url: widget.blockFormData![index].images![indexdata].image.validate() ??
-                                                                            '',
-                                                                        height:
-                                                                            300,
-                                                                        width: MediaQuery.of(context)
+                                                                .length >
+                                                            10
+                                                        ? 10
+                                                        : widget
+                                                            .blockFormData![
+                                                                index]
+                                                            .images!
+                                                            .length;
+                                                    return ListView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        children: [
+                                                          Center(
+                                                            child: widget
+                                                                        .blockFormData![
+                                                                            index]
+                                                                        .images![
+                                                                            indexdata]
+                                                                        .image
+                                                                        .validate()
+                                                                        .contains(
+                                                                            '.mp4') ||
+                                                                    widget
+                                                                        .blockFormData![
+                                                                            index]
+                                                                        .images![
+                                                                            indexdata]
+                                                                        .image
+                                                                        .validate()
+                                                                        .contains(
+                                                                            '.MP4') ||
+                                                                    widget
+                                                                        .blockFormData![
+                                                                            index]
+                                                                        .images![
+                                                                            indexdata]
+                                                                        .image
+                                                                        .validate()
+                                                                        .contains(
+                                                                            '.MOV') ||
+                                                                    widget
+                                                                        .blockFormData![
+                                                                            index]
+                                                                        .images![
+                                                                            indexdata]
+                                                                        .image
+                                                                        .validate()
+                                                                        .contains(
+                                                                            '.mov')
+                                                                ? IgnorePointer(
+                                                                    child:
+                                                                        SizedBox(
+                                                                    height: 300,
+                                                                    width: MediaQuery.of(context)
                                                                             .size
-                                                                            .width,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        radius:
-                                                                            1,
-                                                                      ),
-                                                              )
-                                                            ]);
-                                                      },
-                                                    ),
-                                                  )
-                                                : Container()),
+                                                                            .width -
+                                                                        50,
+                                                                    child:
+                                                                        CachedVideoWidget(
+                                                                      url: widget
+                                                                              .blockFormData![index]
+                                                                              .images![indexdata]
+                                                                              .image
+                                                                              .validate() ??
+                                                                          '',
+                                                                      height:
+                                                                          300,
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      radius: 1,
+                                                                    ),
+                                                                  ))
+                                                                : CachedImageWidget(
+                                                                    url: widget
+                                                                            .blockFormData![index]
+                                                                            .images![indexdata]
+                                                                            .image
+                                                                            .validate() ??
+                                                                        '',
+                                                                    height: 300,
+                                                                    width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                    radius: 1,
+                                                                  ),
+                                                          )
+                                                        ]);
+                                                  },
+                                                ),
+                                              )
+                                            : Container()),
                           ],
                         ),
                         Row(
@@ -319,6 +343,12 @@ class _CustomerBlockFormListWidgetState
                                   fit: BoxFit.cover,
                                   color: white),
                             ).onTap(() {
+                              if (!getBoolAsync(IS_LOGGED_IN)) {
+                                toast(
+                                    "Please login to view block form details");
+                                return;
+                              }
+
                               showInDialog(
                                 context,
                                 contentPadding: EdgeInsets.zero,
@@ -397,6 +427,11 @@ class _CustomerBlockFormListWidgetState
                                   fit: BoxFit.cover,
                                 ),
                               ).onTap(() async {
+                                if (!getBoolAsync(IS_LOGGED_IN)) {
+                                  toast(
+                                      "Please login to send media to your whatsapp");
+                                  return;
+                                }
                                 if (isWhatsappApi == true) {
                                   toast(
                                       "Sending media to your whatsapp is in progress..");
@@ -431,15 +466,29 @@ class _CustomerBlockFormListWidgetState
                             if (getStringAsync(USER_ROLE) == UserRoleCustomer)
                               Container(
                                 decoration: boxDecorationWithRoundedCorners(
-                                    boxShape: BoxShape.circle,
+                                    boxShape: BoxShape.rectangle,
                                     backgroundColor: kPrimaryColor),
                                 padding: const EdgeInsets.all(10),
-                                child: Image.asset("assets/icons/privacy.png",
-                                    width: 20,
-                                    height: 20,
-                                    fit: BoxFit.cover,
-                                    color: white),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.favorite,
+                                      color: white,
+                                      size: 20,
+                                    ),
+                                    8.width,
+                                    Text('Add to Wishlist',
+                                        style: boldTextStyle(
+                                            size: 12, color: white)),
+                                  ],
+                                ),
                               ).onTap(() async {
+                                if (!getBoolAsync(IS_LOGGED_IN)) {
+                                  toast(
+                                      "Please login to add block to wishlist");
+                                  return;
+                                }
+
                                 showConfirmDialogCustom(
                                   context,
                                   primaryColor: kPrimaryColor,
@@ -459,8 +508,7 @@ class _CustomerBlockFormListWidgetState
                                     });
                                   },
                                   title:
-                                      'Are you sure you wants to hold this block for you'
-                                      '?',
+                                      'Are you sure you wants to add this block to wishlist?',
                                 );
                               }),
                           ],
@@ -469,8 +517,9 @@ class _CustomerBlockFormListWidgetState
                     ),
                   ).paddingBottom(30),
                   if (getStatusData(widget.blockFormData![index].form_status
-                          .validate())! !=
-                      '')
+                              .validate())! !=
+                          '' &&
+                      getBoolAsync(IS_LOGGED_IN))
                     Positioned(
                       right: 0,
                       top: 0,

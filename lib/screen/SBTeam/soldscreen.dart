@@ -35,7 +35,7 @@ class _SoldScreenState extends State<SoldScreen> {
   FocusNode nameFocus = FocusNode();
   bool is_long_press = false;
   String _image = "";
-  final cs.CarouselController _controller = cs.CarouselController();
+  final cs.CarouselSliderController _controller = cs.CarouselSliderController();
 
   @override
   void initState() {

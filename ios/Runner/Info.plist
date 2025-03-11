@@ -11,7 +11,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Stone India</string>
+	<string>Stone India - Granites</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -19,32 +19,55 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>stoneindia</string>
+	<string>Stone India - Granites</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We need access to your contacts to invite sellers and provide better services within the app. We do not track your activity across apps or websites.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.376613921123-gip3idivcg17ve7anvea2gecsghdu2od</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
-		<true/>
 		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Stone India want to access your camera for profile photo</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Stone India app needs access to your contacts to allow you to easily invite your friends and share content.</string>
+	<string>We need access to your contacts to invite them to our platform.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Stone India want to access your microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Stone India want to access your gallery for profile photo</string>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<string>NSPrivacyAccessedAPITypesNetworking</string>
+		<string>NSPrivacyAccessedAPITypesCalendar</string>
+		<string>NSPrivacyAccessedAPITypesContacts</string>
+		<string>NSPrivacyAccessedAPITypesPhotoLibrary</string>
+		<string>NSPrivacyAccessedAPITypesMicrophone</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

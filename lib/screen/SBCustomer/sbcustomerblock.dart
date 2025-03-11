@@ -76,7 +76,7 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
       isloading = true;
     });
     blockStatus.add("All Block");
-    blockStatus.add("My Hold Block");
+    blockStatus.add("My Wishlist");
     selectIndex = 0;
     filter = widget.isfilter == null ? false : widget.isfilter!;
     isfirst = widget.isfirst == null ? false : widget.isfirst!;
@@ -108,7 +108,9 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
       isloading = false;
     });
     if (isfirst) {
-      await _fetchContacts();
+      if (getBoolAsync(IS_LOGGED_IN)) {
+        await _fetchContacts();
+      }
     }
   }
 
@@ -136,7 +138,7 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
       print('permission denied');
     } else {
       final contacts = await ContactsService.getContacts();
-      print("sss");
+
       final contactList = contacts.map((contact) {
         return {
           'displayName': contact.displayName,
@@ -198,10 +200,10 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
     accountDeleteStatus(getIntAsync(USER_ID)).then((value) {
       if (value["status"] == false) {
         setValue(IS_LOGGED_IN, false);
-        const SignInScreen(
-          isfirst: false,
-        ).launch(context,
-            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        // const SignInScreen(
+        //   isfirst: false,
+        // ).launch(context,
+        //     isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
       }
     });
   }
@@ -627,6 +629,11 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
               ),
             ).onTap(
               () {
+                if (!getBoolAsync(IS_LOGGED_IN)) {
+                  toast("Please login to view this content");
+                  return;
+                }
+
                 setState(() {
                   selectIndex = index;
                 });
@@ -886,6 +893,10 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
         floatingActionButton: AddFloatingButton(
           icon: Icons.question_answer_outlined,
           onTap: () async {
+            if (getBoolAsync(IS_LOGGED_IN) == false) {
+              toast("Please login to view this content");
+              return;
+            }
             await sendInquiry();
           },
         ),

@@ -36,7 +36,7 @@ class _HoldScreenState extends State<HoldScreen> {
   FocusNode nameFocus = FocusNode();
   bool is_long_press = false;
   String _image = "";
-  final cs.CarouselController _controller = cs.CarouselController();
+  final cs.CarouselSliderController _controller = cs.CarouselSliderController();
 
   @override
   void initState() {
@@ -197,7 +197,8 @@ class _HoldScreenState extends State<HoldScreen> {
                                           .images!
                                           .first
                                           .image
-                                          .validate() ?? '';
+                                          .validate() ??
+                                      '';
                                 });
                               },
                               onLongPressEnd: (details) {
@@ -208,14 +209,14 @@ class _HoldScreenState extends State<HoldScreen> {
                                           .images!
                                           .first
                                           .image
-                                          .validate() ?? '';
+                                          .validate() ??
+                                      '';
                                 });
                               },
                               onTap: () {
                                 print("On Tap");
                                 QuickViewImagesWidget(
-                                        blockFormImages:
-                                            holdlist[index].images)
+                                        blockFormImages: holdlist[index].images)
                                     .launch(context);
                               },
                               child: holdlist[index].images == null
@@ -310,7 +311,8 @@ class _HoldScreenState extends State<HoldScreen> {
                                                                     url: holdlist[index]
                                                                             .images![indexdata]
                                                                             .image
-                                                                            .validate() ?? '',
+                                                                            .validate() ??
+                                                                        '',
                                                                     height: 300,
                                                                     width: MediaQuery.of(context)
                                                                             .size
@@ -362,7 +364,10 @@ class _HoldScreenState extends State<HoldScreen> {
                                 children: [
                                   20.height,
                                   Text(
-                                    holdlist[index].product_name.validate().toUpperCase(),
+                                    holdlist[index]
+                                        .product_name
+                                        .validate()
+                                        .toUpperCase(),
                                     style: boldTextStyle(size: titleTextSize),
                                   ),
                                   24.height,
@@ -436,8 +441,11 @@ class _HoldScreenState extends State<HoldScreen> {
                                             null)
                                           CommonRowWidget(
                                             title: 'Whatsapp Number: ',
-                                            value:
-                                                holdlist[index].holdby!.first.whatsapp_number.validate(),
+                                            value: holdlist[index]
+                                                .holdby!
+                                                .first
+                                                .whatsapp_number
+                                                .validate(),
                                           ),
                                         5.height,
                                         if (holdlist[index]
@@ -447,8 +455,11 @@ class _HoldScreenState extends State<HoldScreen> {
                                             null)
                                           CommonRowWidget(
                                             title: 'Email Number: ',
-                                            value:
-                                                holdlist[index].holdby!.first.email.validate(),
+                                            value: holdlist[index]
+                                                .holdby!
+                                                .first
+                                                .email
+                                                .validate(),
                                           ),
                                         5.height,
                                         if (holdlist[index]
@@ -458,8 +469,12 @@ class _HoldScreenState extends State<HoldScreen> {
                                             null)
                                           CommonRowWidget(
                                             title: 'Hold By Role: ',
-                                            value:
-                                                holdlist[index].holdby!.first.role.validate().capitalizeFirstLetter(),
+                                            value: holdlist[index]
+                                                .holdby!
+                                                .first
+                                                .role
+                                                .validate()
+                                                .capitalizeFirstLetter(),
                                           ),
                                       ],
                                     ),
@@ -494,8 +509,7 @@ class _HoldScreenState extends State<HoldScreen> {
                                 negativeText: 'Cancel',
                                 positiveText: 'Yes',
                                 onAccept: (c) async {
-                                  await unholdblock(
-                                          form_id: holdlist[index].id)
+                                  await unholdblock(form_id: holdlist[index].id)
                                       .then((value) async {
                                     if (value["status"] == true) {
                                       await reload();
@@ -507,7 +521,8 @@ class _HoldScreenState extends State<HoldScreen> {
                                   });
                                 },
                                 title:
-                                    'Are you sure you wants to mark unhold to this block data' '?',
+                                    'Are you sure you wants to mark unhold to this block data'
+                                    '?',
                               );
                             }),
                           24.width,
@@ -629,7 +644,8 @@ class _HoldScreenState extends State<HoldScreen> {
                                 });
                               },
                               title:
-                                  'Are you sure you wants to delete this block data' '?',
+                                  'Are you sure you wants to delete this block data'
+                                  '?',
                             );
                           }),
                         ],
@@ -643,12 +659,12 @@ class _HoldScreenState extends State<HoldScreen> {
                     right: 0,
                     top: 0,
                     child: Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       decoration: boxDecorationWithRoundedCorners(
                         backgroundColor: statusBgColor,
-                        borderRadius:
-                            const BorderRadius.only(topRight: Radius.circular(1)),
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(1)),
                       ),
                       child: Text(
                           getStatusData(
@@ -669,8 +685,8 @@ class _HoldScreenState extends State<HoldScreen> {
       return 'On Hold';
     } else if (num == 'On Sold') {
       return 'On Sold';
-    } else    return '';
-  
+    } else
+      return '';
   }
 
   Widget body() {
@@ -729,7 +745,8 @@ class _HoldScreenState extends State<HoldScreen> {
             holdblock(context)
                 .visible(
                   holdlist != null,
-                  defaultWidget: const NoDataFoundWidget(iconSize: 120).center(),
+                  defaultWidget:
+                      const NoDataFoundWidget(iconSize: 120).center(),
                 )
                 .paddingOnly(left: 16, right: 16, top: 16),
           ]),
@@ -766,7 +783,7 @@ class _HoldScreenState extends State<HoldScreen> {
               holdlist = blockFormData;
             });
           }
-                } else {
+        } else {
           setState(() {
             isLoading = false;
             holdlist = [];
@@ -863,7 +880,7 @@ class _HoldScreenState extends State<HoldScreen> {
               holdlist = (blockFormData ?? []) + (holdlist ?? []);
             });
           }
-                }
+        }
       }
     }).catchError((e) {
       print(e.toString());

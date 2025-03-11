@@ -30,24 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
         statusBarBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.dark);
     await Future.delayed(const Duration(seconds: 2));
-    if (getBoolAsync(IS_LOGGED_IN, defaultValue: false)) {
-      if (getStringAsync(USER_ROLE) == UserRoleStoneBharatTeam) {
-        const SBTeamDashboard(runHomeApi: true, isfilter: false)
-            .launch(context, isNewTask: true);
-      } else if (getStringAsync(USER_ROLE) == UserRoleCustomer) {
-        const SBCustomerDashboard(
-                runHomeApi: true, isfilter: false, isfirst: false)
-            .launch(context, isNewTask: true);
-      } else {
-        const SignUpScreen().launch(context, isNewTask: true);
-      }
+    if (getBoolAsync(IS_WALKTHROUGH_FIRST, defaultValue: false)) {
+      // SignInScreen(isfirst: true).launch(context, isNewTask: true);
+      const SBCustomerDashboard(
+              runHomeApi: true, isfilter: false, isfirst: true)
+          .launch(context);
     } else {
-      if (getBoolAsync(IS_WALKTHROUGH_FIRST, defaultValue: false)) {
-        // SignInScreen(isfirst: true).launch(context, isNewTask: true);
-        const SignUpScreen().launch(context);
-      } else {
-        const WalkThroughScreen().launch(context, isNewTask: true);
-      }
+      const WalkThroughScreen().launch(context, isNewTask: true);
     }
   }
 

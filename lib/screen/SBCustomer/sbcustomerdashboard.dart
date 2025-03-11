@@ -1,6 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stoneindia/contants.dart';
+import 'dart:developer' as dev;
 import 'package:stoneindia/screen/SBCustomer/sbcustomerblock.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomersetting.dart';
 import 'package:stoneindia/widget/topname.dart';
@@ -47,9 +50,9 @@ class _SBCustomerDashboardState extends State<SBCustomerDashboard> {
 
   init() async {
     setStatusBarColor(scaffoldBgColor);
-    runHomeApi = widget.runHomeApi!;
-    isfilter = widget.isfilter!;
-    isfirst = widget.isfirst!;
+    runHomeApi = widget.runHomeApi ?? false;
+    isfilter = widget.isfilter ?? false;
+    isfirst = widget.isfirst ?? false;
   }
 
   @override
@@ -59,10 +62,11 @@ class _SBCustomerDashboardState extends State<SBCustomerDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    dev.log(getBoolAsync(IS_LOGGED_IN).toString());
     return DoublePressBackWidget(
-      child: SafeArea(
-        child: Scaffold(
-          body: Stack(
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
             children: [
               const TopNameWidget().visible(currentIndex != 1),
               Container(
@@ -83,61 +87,61 @@ class _SBCustomerDashboardState extends State<SBCustomerDashboard> {
               ),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: currentIndex,
-            onTap: (i) {
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (i) {
+            currentIndex = i;
+            setState(() {
+              runHomeApi = false;
               currentIndex = i;
-              setState(() {
-                runHomeApi = false;
-                currentIndex = i;
-              });
-            },
-            type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            // selectedItemColor: kPrimaryColor,
-            backgroundColor: kPrimaryColor,
-            mouseCursor: MouseCursor.uncontrolled,
-            fixedColor: kTextLightColor,
-            elevation: 12,
-            items: [
-              // BottomNavigationBarItem(
-              //   icon: Image.asset('assets/icons/home.png', height: iconSize, width: iconSize),
-              //   activeIcon: Image.asset('assets/icons/homefill.png', height: iconSize, width: iconSize),
-              //   label: 'Dashboard',
-              // ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/icons/block.png',
-                  height: iconSize,
-                  width: iconSize,
-                  color: Colors.white,
-                ),
-                activeIcon: Image.asset(
-                  'assets/icons/blockfill.png',
-                  height: iconSize,
-                  width: iconSize,
-                  color: Colors.white,
-                ),
-                label: 'Block',
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          // selectedItemColor: kPrimaryColor,
+          backgroundColor: kPrimaryColor,
+          mouseCursor: MouseCursor.uncontrolled,
+          fixedColor: kTextLightColor,
+          elevation: 12,
+          items: [
+            // BottomNavigationBarItem(
+            //   icon: Image.asset('assets/icons/home.png', height: iconSize, width: iconSize),
+            //   activeIcon: Image.asset('assets/icons/homefill.png', height: iconSize, width: iconSize),
+            //   label: 'Dashboard',
+            // ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/block.png',
+                height: iconSize,
+                width: iconSize,
+                color: Colors.white,
               ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/icons/profile.png',
-                  height: iconSize,
-                  width: iconSize,
-                  color: Colors.white,
-                ),
-                activeIcon: Image.asset(
-                  "assets/icons/profilefill.png",
-                  height: iconSize,
-                  width: iconSize,
-                  color: Colors.white,
-                ),
-                label: 'Settings',
+              activeIcon: Image.asset(
+                'assets/icons/blockfill.png',
+                height: iconSize,
+                width: iconSize,
+                color: Colors.white,
               ),
-            ],
-          ),
+              label: 'Block',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/profile.png',
+                height: iconSize,
+                width: iconSize,
+                color: Colors.white,
+              ),
+              activeIcon: Image.asset(
+                "assets/icons/profilefill.png",
+                height: iconSize,
+                width: iconSize,
+                color: Colors.white,
+              ),
+              label: 'Settings',
+            ),
+          ],
         ),
       ),
     );

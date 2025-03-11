@@ -1,9 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:developer' as dev;
+
+import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:stoneindia/contants.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerdashboard.dart';
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
+import 'package:stoneindia/screen/otpscreen.dart';
 import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/utils/notification_send.dart';
 import 'package:stoneindia/utils/restapi.dart';
@@ -29,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   bool? rememberMe = false;
   String? number;
+
   String? country_code;
   String? country_iso_code = 'IN';
 
@@ -45,7 +56,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return translatedText;
   }
 
+  Future _fetchContacts() async {
+    if (!await FlutterContacts.requestPermission(readonly: true)) {
+      print('permission denied');
+    } else {
+      final contacts = await ContactsService.getContacts();
+      print("sss");
+      final contactList = contacts.map((contact) {
+        return {
+          'displayName': contact.displayName,
+          'phones': contact.phones
+                      ?.map((phone) => phone.value?.replaceAll(' ', ''))
+                      .toList() ==
+                  null
+              ? ""
+              : contact.phones!
+                      .map((phone) => phone.value?.replaceAll(' ', ''))
+                      .toList()
+                      .isNotEmpty
+                  ? contact.phones
+                      ?.map((phone) => phone.value?.replaceAll(' ', ''))
+                      .toList()
+                      .first
+                      .toString()
+                  : "",
+          'emails': contact.emails?.map((email) => email.value).toList() == null
+              ? ""
+              : contact.emails!.map((email) => email.value).toList().isNotEmpty
+                  ? contact.emails
+                      ?.map((email) => email.value)
+                      .toList()
+                      .first
+                      .toString()
+                  : "",
+          //"translatedName": getTranslatedName(contact.displayName)
+        };
+      }).toList();
+
+      Map req = {
+        'user_id': "${getIntAsync(USER_ID)}",
+      };
+      final jsonData = jsonEncode(contactList);
+      Directory directory = await getApplicationDocumentsDirectory();
+      File file = File('${directory.path}/contacts.json');
+      try {
+        await file.writeAsString(jsonData);
+        if (file.existsSync()) {
+          // final read = await file.readAsString();
+          // print(read);
+          // return jsonDecode(read);
+
+          await sendContactJsonFile(req, filePath: file.path).then((value) {
+            print("ok");
+          }).onError((error, stackTrace) {
+            print("errr");
+            print(error.toString());
+          });
+        }
+      } catch (e) {
+        print('Tried writing _file error: $e');
+      }
+    }
+  }
+
   signUp() async {
+    // navigate to otpscree
+    log("I am here");
     if (number == null) {
       toast("Please enter valid details!");
       return;
@@ -56,6 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       setState(() {
         isLoading = true;
       });
+
       Map request = {
         "firstname": firstNameCont.text.validate(),
         "lastname": lastNameCont.text.validate(),
@@ -101,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               }
               // if(isfirst == true){
 
-              // await _fetchContacts();
+              await _fetchContacts();
               toast('Login Successfully');
               setState(() {
                 isLoading = false;
@@ -328,7 +405,74 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         shapeBorder:
                             RoundedRectangleBorder(borderRadius: radius()),
                         onTap: () async {
-                          await signUp();
+                          if (number == null) {
+                            toast("Please enter valid details!");
+                            return;
+                          }
+                          if (firstNameCont.text.isEmpty ||
+                              lastNameCont.text.isEmpty ||
+                              number!.isEmpty) {
+                            toast("Please enter valid details!");
+                            return;
+                          }
+                          log("I am here, Phone number ${number!}");
+                          Map req = {
+                            'whatsapp_number':
+                                number.toString().replaceAll("+", ""),
+                            'fcm_token': getStringAsync(FCM_TOKEN).toString(),
+                            'country_code':
+                                country_code.validate().replaceAll("+", ""),
+                            'country_iso_code': country_iso_code.validate(),
+                          };
+                          bool isUserExists = false;
+                          await login(req).then((value) async {
+                            if (value["status"] == true &&
+                                value["messages"] == "Login successfully!" &&
+                                value['role'] == "customer") {
+                              isUserExists = true;
+                              toastLong('User already exists');
+                            }
+                          }).catchError((e) {});
+
+                          if (isUserExists) {
+                            dev.log("User already exists");
+                            return;
+                          }
+
+                          FirebaseAuth auth = FirebaseAuth.instance;
+                          await auth.verifyPhoneNumber(
+                            phoneNumber: number!,
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) async {
+                              await auth.signInWithCredential(credential);
+                              print("Automatic Verification Done");
+                            },
+                            verificationFailed: (FirebaseAuthException e) {
+                              print("Verification Failed: ${e.message}");
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Otpscreen(
+                                    mobile: number!,
+                                    verificationId: verificationId,
+                                    onVerificationDone: () async {
+                                      await signUp();
+                                    },
+                                  ),
+                                ),
+                              );
+                              print("OTP Sent");
+                            },
+                            codeAutoRetrievalTimeout: (String verificationId) {
+                              print("Timeout");
+                            },
+                            //
+                          );
+
+                          // await signUp();
                         },
                         color: kPrimaryColor,
                         padding: const EdgeInsets.all(16),
@@ -341,12 +485,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         subTitle: 'Login', onTap: () {
                       const SignInScreen(
                         isfirst: false,
-                      ).launch(context);
+                      ).launch(context, isNewTask: true);
                     }),
                     24.height,
                   ],
                 ),
               ).center(),
+              Align(
+                alignment: Alignment.topRight,
+                child: TextButton(
+                  onPressed: () {
+                    // pop context
+                    const SBCustomerDashboard(
+                            runHomeApi: true, isfilter: false, isfirst: true)
+                        .launch(context, isNewTask: true);
+                  },
+                  child: Text(
+                    "Skip",
+                    style: primaryTextStyle(
+                        size: 16, color: black, weight: FontWeight.bold),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

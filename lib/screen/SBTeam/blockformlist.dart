@@ -29,7 +29,7 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
   String _image = "";
   bool isloadingblocklist = false;
   List<BlockFormData>? blockformlist;
-  final cs.CarouselController _controller = cs.CarouselController();
+  final cs.CarouselSliderController _controller = cs.CarouselSliderController();
   bool isWhatsappApi = false;
 
   @override

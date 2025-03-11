@@ -18,18 +18,18 @@ import 'package:stoneindia/widget/detailsphotoview.dart';
 import 'package:stoneindia/widget/nodatafound.dart';
 
 class UploadImageBlockFormScreen extends StatefulWidget {
-
-  const UploadImageBlockFormScreen({Key? key,
-    this.block_name,
-    this.product_name,
-    this.category_name,
-    this.form_type,
-    this.slab_type_name,
-    this.slab_height,
-    this.slab_length,
-    this.slab_thickness,
-    this.total_slabs
-  }) : super(key: key);
+  const UploadImageBlockFormScreen(
+      {Key? key,
+      this.block_name,
+      this.product_name,
+      this.category_name,
+      this.form_type,
+      this.slab_type_name,
+      this.slab_height,
+      this.slab_length,
+      this.slab_thickness,
+      this.total_slabs})
+      : super(key: key);
 
   final String? block_name;
   final String? product_name;
@@ -42,10 +42,12 @@ class UploadImageBlockFormScreen extends StatefulWidget {
   final String? total_slabs;
 
   @override
-  _UploadImageBlockFormScreenState createState() => _UploadImageBlockFormScreenState();
+  _UploadImageBlockFormScreenState createState() =>
+      _UploadImageBlockFormScreenState();
 }
 
-class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen> with SingleTickerProviderStateMixin{
+class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<String> imagesList = [];
   List<String> uploadedImageList = [];
@@ -89,7 +91,7 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
     );
     setState(() {
       uploadedImageList.addAll(images.map((image) => image.path));
-        });
+    });
   }
 
   Future<void> getgalleryVideo() async {
@@ -103,33 +105,48 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
     });
   }
 
-
-
   @override
   void initState() {
     super.initState();
     init();
   }
+
 //---filter
   init() async {
-    setStatusBarColor(scaffoldBgColor, statusBarIconBrightness: Brightness.light);
+    setStatusBarColor(scaffoldBgColor,
+        statusBarIconBrightness: Brightness.light);
     imageStatus.add("Gallery");
     imageStatus.add("Server");
     selectIndex = 0;
     _tabController = TabController(length: 2, vsync: this);
-    await filterservermedia(null, categorySelectedData, isEnquiryData, productSelectedData, blockSelectedData, slabSelectedData).then((value){
-      if(value.data!.isNotEmpty){
+    await filterservermedia(null, categorySelectedData, isEnquiryData,
+            productSelectedData, blockSelectedData, slabSelectedData)
+        .then((value) {
+      if (value.data!.isNotEmpty) {
         setState(() {
           List<String> imglist = [];
           List<String> vidlist = [];
           for (var data in value.data!) {
-            if(data.website_media.validate().contains('.mp4') || data.website_media.validate().contains('.MP4') || data.website_media.validate().contains('.MOV') || data.website_media.validate().contains('.mov')){
+            if (data.website_media.validate().contains('.mp4') ||
+                data.website_media.validate().contains('.MP4') ||
+                data.website_media.validate().contains('.MOV') ||
+                data.website_media.validate().contains('.mov')) {
               print("video");
-              String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-              vidlist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
-            }else if(data.website_media.validate().contains('.jpeg') || data.website_media.validate().contains('.jpg') || data.website_media.validate().contains('.png')){
-              String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-              imglist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
+              String url = data.website_media
+                  .validate()
+                  .toString()
+                  .replaceFirst("http://", "https://");
+              vidlist.add(
+                  "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
+            } else if (data.website_media.validate().contains('.jpeg') ||
+                data.website_media.validate().contains('.jpg') ||
+                data.website_media.validate().contains('.png')) {
+              String url = data.website_media
+                  .validate()
+                  .toString()
+                  .replaceFirst("http://", "https://");
+              imglist.add(
+                  "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
             }
           }
           imageList = imglist;
@@ -137,7 +154,7 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
           last_id = value.last_id;
           print("imageList: $imageList");
         });
-      }else{
+      } else {
         setState(() {
           videoList = [];
           imageList = [];
@@ -157,7 +174,8 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
 
   @override
   void dispose() {
-    setStatusBarColor(scaffoldBgColor,
+    setStatusBarColor(
+      scaffoldBgColor,
       statusBarIconBrightness: Brightness.light,
     );
     super.dispose();
@@ -165,7 +183,15 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
 
   addblockformData() async {
     toast("Upload in progress..");
-    if(!widget.form_type.isEmptyOrNull && !widget.block_name.isEmptyOrNull && !widget.product_name.isEmptyOrNull && !widget.category_name.isEmptyOrNull && !widget.slab_type_name.isEmptyOrNull && !widget.slab_height.isEmptyOrNull && !widget.slab_length.isEmptyOrNull && !widget.slab_thickness.isEmptyOrNull && !widget.total_slabs.isEmptyOrNull) {
+    if (!widget.form_type.isEmptyOrNull &&
+        !widget.block_name.isEmptyOrNull &&
+        !widget.product_name.isEmptyOrNull &&
+        !widget.category_name.isEmptyOrNull &&
+        !widget.slab_type_name.isEmptyOrNull &&
+        !widget.slab_height.isEmptyOrNull &&
+        !widget.slab_length.isEmptyOrNull &&
+        !widget.slab_thickness.isEmptyOrNull &&
+        !widget.total_slabs.isEmptyOrNull) {
       setState(() {
         isLoading = true;
       });
@@ -183,9 +209,9 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
       };
       print("Media List: $mediaImageList");
       print("Image List: $imagesList");
-      addBlockForm(request, mediaImageList,  file: imagesList).then((value) {
-
-      }).whenComplete(() async {
+      addBlockForm(request, mediaImageList, file: imagesList)
+          .then((value) {})
+          .whenComplete(() async {
         print("jj");
         await fetchblocklistdata();
         setState(() {
@@ -196,7 +222,7 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
       setState(() {
         isLoading = false;
       });
-    }else{
+    } else {
       toast("Empty data found");
       setState(() {
         isLoading = false;
@@ -204,16 +230,16 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
     }
   }
 
-  fetchblocklistdata() async{
+  fetchblocklistdata() async {
     setState(() {
       isloadingblocklist = true;
     });
-    fetchblockform().then((value){
-      if(value.status == true){
+    fetchblockform().then((value) {
+      if (value.status == true) {
         setValue(BLOCK_FORM_LIST_LAST_ID, value.last_id);
-        if(value.blockFormData != null){
-          if(value.blockFormData!.isNotEmpty){
-            List<BlockFormData>blockFormData = [];
+        if (value.blockFormData != null) {
+          if (value.blockFormData!.isNotEmpty) {
+            List<BlockFormData> blockFormData = [];
             for (var element in value.blockFormData!) {
               blockFormData.add(BlockFormData(
                 id: element.id,
@@ -230,17 +256,18 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
                 images: element.images == null ? [] : element.images!.toList(),
               ));
             }
-            setValue(BLOCK_FORM_LIST,jsonEncode(blockFormData));
+            setValue(BLOCK_FORM_LIST, jsonEncode(blockFormData));
             print("BLOCK_FORM_LIST Update: ${getStringAsync(BLOCK_FORM_LIST)}");
-            const SBTeamDashboard(runHomeApi: false, isfilter: false).launch(context, isNewTask: true);
+            const SBTeamDashboard(runHomeApi: false, isfilter: false)
+                .launch(context, isNewTask: true);
           }
         }
-      }else{
+      } else {
         setState(() {
           isloadingblocklist = false;
         });
       }
-    }).catchError((e){
+    }).catchError((e) {
       print(e.toString());
       setState(() {
         isloadingblocklist = false;
@@ -268,7 +295,7 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
               _gallary_image = asset;
             });
           },
-          onDoubleTap: (){
+          onDoubleTap: () {
             print('select image upload');
             print(uploadedImageList);
             setState(() {
@@ -280,91 +307,96 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
               print(checkIfImageAdded(asset.toString()));
             });
           },
-          onTap: (){
-
-          },
-            child: (_is_select_gallary_image == true && checkIfImageAdded(asset.validate()) == true)
-                ? Stack(
-              children: <Widget>[
-                ColorFiltered(
-                  colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color),
-                  child: GestureDetector(
-                    onLongPress: () {
-                      print('Long Press Begin');
-                      setState(() {
-                        is_long_press = true;
-                        _image = asset.validate();
-                      });
-                    },
-                    onLongPressEnd: (details) {
-                      print('Long Press End');
-                      setState(() {
-                        is_long_press = false;
-                        _image = asset.validate();
-                      });
-                    },
-                    onDoubleTap: (){
-                      print('selectkk');
-                      setState(() {
-                        // is_select = false;
-                        _is_select_image = asset.validate();
-                        imagesList.remove(asset.validate());
-                        print(imagesList);
-                      });
-                    },
-                    child: asset.toString().contains('.mp4') || asset.toString().contains('.MP4') || asset.toString().contains('.mov') || asset.toString().contains('.MOV')
-                      ? CachedVideoWidget(
-                        url: asset.toString(),
-                        height:MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                        radius: 10,
-                      ).cornerRadiusWithClipRRect(10).paddingAll(2)
-                          : CachedImageWidget(
-                        url: asset.toString(),
-                        height:MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                        radius: 10,
-                      ).cornerRadiusWithClipRRect(10).paddingAll(2),
-                  ),
-                ),
-                Positioned(
-                  bottom: 15, right: 20, //give the values according to your requirement
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: TextButton(
-                      child: const Icon(
-                        Icons.check,
-                        color: Colors.orange,
-                        size: 20,
+          onTap: () {},
+          child: (_is_select_gallary_image == true &&
+                  checkIfImageAdded(asset.validate()) == true)
+              ? Stack(
+                  children: <Widget>[
+                    ColorFiltered(
+                      colorFilter:
+                          const ColorFilter.mode(Colors.black, BlendMode.color),
+                      child: GestureDetector(
+                        onLongPress: () {
+                          print('Long Press Begin');
+                          setState(() {
+                            is_long_press = true;
+                            _image = asset.validate();
+                          });
+                        },
+                        onLongPressEnd: (details) {
+                          print('Long Press End');
+                          setState(() {
+                            is_long_press = false;
+                            _image = asset.validate();
+                          });
+                        },
+                        onDoubleTap: () {
+                          print('selectkk');
+                          setState(() {
+                            // is_select = false;
+                            _is_select_image = asset.validate();
+                            imagesList.remove(asset.validate());
+                            print(imagesList);
+                          });
+                        },
+                        child: asset.toString().contains('.mp4') ||
+                                asset.toString().contains('.MP4') ||
+                                asset.toString().contains('.mov') ||
+                                asset.toString().contains('.MOV')
+                            ? CachedVideoWidget(
+                                url: asset.toString(),
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                                radius: 10,
+                              ).cornerRadiusWithClipRRect(10).paddingAll(2)
+                            : CachedImageWidget(
+                                url: asset.toString(),
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                                radius: 10,
+                              ).cornerRadiusWithClipRRect(10).paddingAll(2),
                       ),
-                      onPressed: () {},
                     ),
-                  ),
-                ),
-              ],
-            ).cornerRadiusWithClipRRect(10).paddingAll(2)
-                : asset.toString().contains('.mp4') || asset.toString().contains('.MP4') || asset.toString().contains('.mov') || asset.toString().contains('.MOV')
-                ? CachedVideoWidget(
-                    url: asset.toString(),
-                    height:MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                    radius: 10,
-                  ).cornerRadiusWithClipRRect(10).paddingAll(2)
-                : CachedImageWidget(
-                  url: asset.toString(),
-                  height:MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                  radius: 10,
-                ).cornerRadiusWithClipRRect(10).paddingAll(2),
-
+                    Positioned(
+                      bottom: 15,
+                      right: 20, //give the values according to your requirement
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: TextButton(
+                          child: const Icon(
+                            Icons.check,
+                            color: Colors.orange,
+                            size: 20,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  ],
+                ).cornerRadiusWithClipRRect(10).paddingAll(2)
+              : asset.toString().contains('.mp4') ||
+                      asset.toString().contains('.MP4') ||
+                      asset.toString().contains('.mov') ||
+                      asset.toString().contains('.MOV')
+                  ? CachedVideoWidget(
+                      url: asset.toString(),
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      radius: 10,
+                    ).cornerRadiusWithClipRRect(10).paddingAll(2)
+                  : CachedImageWidget(
+                      url: asset.toString(),
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      radius: 10,
+                    ).cornerRadiusWithClipRRect(10).paddingAll(2),
         );
-      }
-      ),
+      }),
     ).paddingAll(16);
   }
 
@@ -389,10 +421,7 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [
-              serverGridViewImages(),
-              serverGridViewVideo()
-            ],
+            children: [serverGridViewImages(), serverGridViewVideo()],
           ),
         ),
       ],
@@ -401,14 +430,16 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
 
   Widget serverGridViewImages() {
     return GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(imageList.length, (index){
+      crossAxisCount: 2,
+      children: List.generate(
+        imageList.length,
+        (index) {
           return _imageitem(
-              media: imageList[index],
-            );
-            },
-          ),
-      ).visible(
+            media: imageList[index],
+          );
+        },
+      ),
+    ).visible(
       imageList.isNotEmpty,
       defaultWidget: const NoDataFoundWidget(iconSize: 120).center(),
     );
@@ -417,11 +448,13 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
   Widget serverGridViewVideo() {
     return GridView.count(
       crossAxisCount: 1,
-      children: List.generate(videoList.length, (index){
-        return _videoitem(
-          media: videoList[index],
-        );
-      },
+      children: List.generate(
+        videoList.length,
+        (index) {
+          return _videoitem(
+            media: videoList[index],
+          );
+        },
       ),
     ).visible(
       videoList.isNotEmpty,
@@ -429,10 +462,10 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
     );
   }
 
-  bool checkIfMediaAdded(String? mediaUrl){
-    if(mediaImageList.isNotEmpty){
-      for(var url in mediaImageList){
-        if(url == mediaUrl){
+  bool checkIfMediaAdded(String? mediaUrl) {
+    if (mediaImageList.isNotEmpty) {
+      for (var url in mediaImageList) {
+        if (url == mediaUrl) {
           return true;
         }
       }
@@ -440,10 +473,10 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
     return false;
   }
 
-  bool checkIfImageAdded(String? imageUrl){
-    if(imagesList.isNotEmpty){
-      for(var url in imagesList){
-        if(url == imageUrl){
+  bool checkIfImageAdded(String? imageUrl) {
+    if (imagesList.isNotEmpty) {
+      for (var url in imagesList) {
+        if (url == imageUrl) {
           return true;
         }
       }
@@ -451,11 +484,12 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
     return false;
   }
 
-  _imageitem({ String? media }) {
+  _imageitem({String? media}) {
     var imageurl = media.validate().split("####@@@@####SB####@@@@####")[0];
     var blockname = media.validate().split("####@@@@####SB####@@@@####")[1];
     var blockid = media.validate().split("####@@@@####SB####@@@@####")[2];
-    var factoryproduct = media.validate().split("####@@@@####SB####@@@@####")[3];
+    var factoryproduct =
+        media.validate().split("####@@@@####SB####@@@@####")[3];
     // print(blockname);
     // print(blockid);
     // print(factoryproduct);
@@ -475,7 +509,7 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
             _image = imageurl;
           });
         },
-        onDoubleTap: (){
+        onDoubleTap: () {
           print('select image server');
           setState(() {
             is_select = true;
@@ -484,224 +518,133 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
             print(mediaImageList);
           });
         },
-        onTap: (){
+        onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return DetailPhotoViewScreen(tag: "Image", url: imageurl.validate());
+            return DetailPhotoViewScreen(
+                tag: "Image", url: imageurl.validate());
           }));
         },
-        child: (is_select == true && checkIfMediaAdded(imageurl.validate()) == true)
+        child: (is_select == true &&
+                checkIfMediaAdded(imageurl.validate()) == true)
             ? Stack(
-          children: <Widget>[
-            ColorFiltered(
-              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color),
-              child: GestureDetector(
-                onLongPress: () {
-                  print('Long Press Begin');
-                  setState(() {
-                    is_long_press = true;
-                    _image = imageurl.validate();
-                  });
-                },
-                onLongPressEnd: (details) {
-                  print('Long Press End');
-                  setState(() {
-                    is_long_press = false;
-                    _image = imageurl.validate();
-                  });
-                },
-                onDoubleTap: (){
-                  print('select');
-                  setState(() {
-                    // is_select = false;
-                    _is_select_image = imageurl.validate();
-                    mediaImageList.remove(imageurl.validate());
-                  });
-                },
-                child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                children: <Widget>[
+                  ColorFiltered(
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.color),
+                    child: GestureDetector(
+                      onLongPress: () {
+                        print('Long Press Begin');
+                        setState(() {
+                          is_long_press = true;
+                          _image = imageurl.validate();
+                        });
+                      },
+                      onLongPressEnd: (details) {
+                        print('Long Press End');
+                        setState(() {
+                          is_long_press = false;
+                          _image = imageurl.validate();
+                        });
+                      },
+                      onDoubleTap: () {
+                        print('select');
+                        setState(() {
+                          // is_select = false;
+                          _is_select_image = imageurl.validate();
+                          mediaImageList.remove(imageurl.validate());
+                        });
+                      },
+                      child: Card(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: CachedImageWidget(
+                                    url: imageurl.validate(),
+                                    height: 110,
+                                    width: 170,
+                                    fit: BoxFit.cover,
+                                    radius: 10,
+                                  ).cornerRadiusWithClipRRect(10).paddingAll(2))
+                                ],
+                              ),
+                              if (blockid != '')
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Block Id - $blockid",
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: kTextColor,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ).paddingOnly(left: 5, right: 5),
+                                    )
+                                  ],
+                                ),
+                              if (blockname != '')
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Block Name - $blockname",
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: kTextColor,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ).paddingOnly(left: 5, right: 5),
+                                    )
+                                  ],
+                                ),
+                              if (factoryproduct != '')
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Product Name - $factoryproduct",
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: kTextColor,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ).paddingOnly(left: 5, right: 5),
+                                    )
+                                  ],
+                                ),
+                            ],
+                          )),
                     ),
-                    elevation: 0,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(child: CachedImageWidget(
-                              url: imageurl.validate(),
-                              height:110,
-                              width:170,
-                              fit: BoxFit.cover,
-                              radius: 10,
-                            ).cornerRadiusWithClipRRect(10).paddingAll(2))
-                          ],
+                  ),
+                  Positioned(
+                    bottom: 15,
+                    right: 20, //give the values according to your requirement
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: TextButton(
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.orange,
+                          size: 20,
                         ),
-                        if(blockid != '')
-                          Row(
-                            children: [
-                              Expanded(child: Text(
-                                "Block Id - $blockid",
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: kTextColor,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ).paddingOnly(left: 5, right: 5),
-                              )
-                            ],
-                          ),
-                        if(blockname != '')
-                          Row(
-                            children: [
-                              Expanded(child: Text(
-                                "Block Name - $blockname",
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: kTextColor,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ).paddingOnly(left: 5, right: 5),)
-                            ],
-                          ),
-                        if(factoryproduct != '')
-                          Row(
-                            children: [
-                              Expanded(child:
-                              Text(
-                                "Product Name - $factoryproduct",
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: kTextColor,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ).paddingOnly(left: 5, right: 5),
-                              )
-                            ],
-                          ),
-                      ],
-                    )
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 15, right: 20, //give the values according to your requirement
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: TextButton(
-                  child: const Icon(
-                    Icons.check,
-                    color: Colors.orange,
-                    size: 20,
+                        onPressed: () {},
+                      ),
+                    ),
                   ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ],
-        ).cornerRadiusWithClipRRect(10).paddingAll(2)
-            : Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 0,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: CachedImageWidget(
-                        url: imageurl.validate(),
-                        height:110,
-                        width:170,
-                        fit: BoxFit.cover,
-                        radius: 10,
-                      ).cornerRadiusWithClipRRect(10).paddingAll(2))
-                    ],
-                  ),
-                  if(blockid != '')
-                  Row(
-                    children: [
-                      Expanded(child: Text(
-                        "Block Id - $blockid",
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: kTextColor,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ).paddingOnly(left: 5, right: 5),
-                      )
-                    ],
-                  ),
-                  if(blockname != '')
-                  Row(
-                    children: [
-                      Expanded(child: Text(
-                        "Block Name - $blockname",
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: kTextColor,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ).paddingOnly(left: 5, right: 5),)
-                    ],
-                  ),
-                  if(factoryproduct != '')
-                    Row(
-                      children: [
-                        Expanded(child:
-                        Text(
-                          "Product Name - $factoryproduct",
-                          maxLines: 2,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: kTextColor,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ).paddingOnly(left: 5, right: 5),
-                        )
-                      ],
-                    )
                 ],
-              )
-        )
-    );
-  }
-
-  _videoitem({ String? media }) {
-    var videourl = media.validate().split("####@@@@####SB####@@@@####")[0];
-    var blockname = media.validate().split("####@@@@####SB####@@@@####")[1];
-    var blockid = media.validate().split("####@@@@####SB####@@@@####")[2];
-    var factoryproduct = media.validate().split("####@@@@####SB####@@@@####")[3];
-    return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onDoubleTap: (){
-          print('select video server');
-          setState(() {
-            is_select = true;
-            mediaImageList.add(videourl.validate());
-            print(mediaImageList);
-          });
-      },
-      child: (is_select == true && checkIfMediaAdded(videourl.validate()) == true)
-        ? Stack(
-      children: <Widget>[
-        ColorFiltered(
-          colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color),
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onDoubleTap: (){
-              print('select remove');
-              setState(() {
-                mediaImageList.remove(videourl.validate());
-              });
-            },
-            child: Card(
+              ).cornerRadiusWithClipRRect(10).paddingAll(2)
+            : Card(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -710,48 +653,235 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
                 child: Column(
                   children: [
                     Row(
+                      children: [
+                        Expanded(
+                            child: CachedImageWidget(
+                          url: imageurl.validate(),
+                          height: 110,
+                          width: 170,
+                          fit: BoxFit.cover,
+                          radius: 10,
+                        ).cornerRadiusWithClipRRect(10).paddingAll(2))
+                      ],
+                    ),
+                    if (blockid != '')
+                      Row(
                         children: [
                           Expanded(
-                              child: SizedBox(
-                                height:280,
-                                width: MediaQuery.of(context).size.width * 0.85,
-                                child: CachedVideoWidget(
-                                  url: videourl.validate(),
-                                  height:280,
-                                  width: 300,
-                                  fit: BoxFit.cover,
-                                  radius: 10,
-                                ).cornerRadiusWithClipRRect(10).paddingAll(2),
+                            child: Text(
+                              "Block Id - $blockid",
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: kTextColor,
+                                overflow: TextOverflow.ellipsis,
                               ),
+                            ).paddingOnly(left: 5, right: 5),
+                          )
+                        ],
+                      ),
+                    if (blockname != '')
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Block Name - $blockname",
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: kTextColor,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ).paddingOnly(left: 5, right: 5),
+                          )
+                        ],
+                      ),
+                    if (factoryproduct != '')
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Product Name - $factoryproduct",
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: kTextColor,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ).paddingOnly(left: 5, right: 5),
+                          )
+                        ],
+                      )
+                  ],
+                )));
+  }
+
+  _videoitem({String? media}) {
+    var videourl = media.validate().split("####@@@@####SB####@@@@####")[0];
+    var blockname = media.validate().split("####@@@@####SB####@@@@####")[1];
+    var blockid = media.validate().split("####@@@@####SB####@@@@####")[2];
+    var factoryproduct =
+        media.validate().split("####@@@@####SB####@@@@####")[3];
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onDoubleTap: () {
+          print('select video server');
+          setState(() {
+            is_select = true;
+            mediaImageList.add(videourl.validate());
+            print(mediaImageList);
+          });
+        },
+        child: (is_select == true &&
+                checkIfMediaAdded(videourl.validate()) == true)
+            ? Stack(
+                children: <Widget>[
+                  ColorFiltered(
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.color),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onDoubleTap: () {
+                        print('select remove');
+                        setState(() {
+                          mediaImageList.remove(videourl.validate());
+                        });
+                      },
+                      child: Card(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ]
+                          elevation: 0,
+                          child: Column(
+                            children: [
+                              Row(children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 280,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.85,
+                                    child: CachedVideoWidget(
+                                      url: videourl.validate(),
+                                      height: 280,
+                                      width: 300,
+                                      fit: BoxFit.cover,
+                                      radius: 10,
+                                    )
+                                        .cornerRadiusWithClipRRect(10)
+                                        .paddingAll(2),
+                                  ),
+                                ),
+                              ]),
+                              const Spacer(),
+                              if (blockid != '')
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Block Id - $blockid",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: kTextColor,
+                                      ),
+                                    ).paddingOnly(left: 5, right: 5)
+                                  ],
+                                ),
+                              if (blockname != '')
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Block Name - $blockname",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: kTextColor,
+                                      ),
+                                    ).paddingOnly(left: 5, right: 5),
+                                  ],
+                                ),
+                              if (factoryproduct != '')
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Product Name - $factoryproduct",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: kTextColor,
+                                      ),
+                                    ).paddingOnly(left: 5, right: 5),
+                                  ],
+                                ),
+                              const Spacer(),
+                            ],
+                          )),
                     ),
+                  ),
+                  Positioned(
+                    bottom: 15,
+                    right: 20, //give the values according to your requirement
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: TextButton(
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.orange,
+                          size: 20,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              ).cornerRadiusWithClipRRect(10).paddingAll(2)
+            : Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+                child: Column(
+                  children: [
+                    Row(children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 280,
+                          width: MediaQuery.of(context).size.width * 0.85,
+                          child: CachedVideoWidget(
+                            url: videourl.validate(),
+                            height: 280,
+                            width: 300,
+                            fit: BoxFit.cover,
+                            radius: 10,
+                          ).cornerRadiusWithClipRRect(10).paddingAll(2),
+                        ),
+                      ),
+                    ]),
                     const Spacer(),
-                    if(blockid != '')
-                    Row(
-                      children: [
-                        Text(
-                          "Block Id - $blockid",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: kTextColor,
-                          ),
-                        ).paddingOnly(left: 5, right: 5)
-                      ],
-                    ),
-                    if(blockname != '')
-                    Row(
-                      children: [
-                        Text(
-                          "Block Name - $blockname",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: kTextColor,
-                          ),
-                        ).paddingOnly(left: 5, right: 5),
-                      ],
-                    ),
-                    if(factoryproduct != '')
+                    if (blockid != '')
+                      Row(
+                        children: [
+                          Text(
+                            "Block Id - $blockid",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: kTextColor,
+                            ),
+                          ).paddingOnly(left: 5, right: 5)
+                        ],
+                      ),
+                    if (blockname != '')
+                      Row(
+                        children: [
+                          Text(
+                            "Block Name - $blockname",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: kTextColor,
+                            ),
+                          ).paddingOnly(left: 5, right: 5),
+                        ],
+                      ),
+                    if (factoryproduct != '')
                       Row(
                         children: [
                           Text(
@@ -764,136 +894,63 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
                         ],
                       ),
                     const Spacer(),
-
                   ],
-                )
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 15, right: 20, //give the values according to your requirement
-          child: SizedBox(
-            height: 20,
-            width: 20,
-            child: TextButton(
-              child: const Icon(
-                Icons.check,
-                color: Colors.orange,
-                size: 20,
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ),
-      ],
-    ).cornerRadiusWithClipRRect(10).paddingAll(2)
-        :  Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 0,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                       child: SizedBox(
-                            height:280,
-                            width: MediaQuery.of(context).size.width * 0.85,
-                            child: CachedVideoWidget(
-                              url: videourl.validate(),
-                              height:280,
-                              width: 300,
-                              fit: BoxFit.cover,
-                              radius: 10,
-                            ).cornerRadiusWithClipRRect(10).paddingAll(2),
-                     ),
-                  ),
-                ]
-              ),
-              const Spacer(),
-              if(blockid != '')
-              Row(
-                children: [
-                  Text(
-                    "Block Id - $blockid",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: kTextColor,
-                    ),
-                  ).paddingOnly(left: 5, right: 5)
-                ],
-              ),
-              if(blockname != '')
-              Row(
-                children: [
-                  Text(
-                    "Block Name - $blockname",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: kTextColor,
-                    ),
-                  ).paddingOnly(left: 5, right: 5),
-                ],
-              ),
-              if(factoryproduct != '')
-                Row(
-                  children: [
-                    Text(
-                      "Product Name - $factoryproduct",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: kTextColor,
-                      ),
-                    ).paddingOnly(left: 5, right: 5),
-                  ],
-                ),
-              const Spacer(),
-            ],
-          )
-      )
-    );
+                )));
   }
 
-  Future refresh() async{
+  Future refresh() async {
     print(last_id);
-      setState(() {
-        _isloading = true;
-      });
-      await filterservermedia(last_id, categorySelectedData, isEnquiryData, productSelectedData, blockSelectedData, slabSelectedData).then((value){
-        if(value.data!.isNotEmpty){
-          setState(() {
-            last_id = value.last_id;
-            List<String> imglist = [];
-            List<String> vidlist = [];
-            for (var data in value.data!) {
-              if(data.website_media.validate().contains('.mp4') || data.website_media.validate().contains('.MP4') || data.website_media.validate().contains('.MOV') || data.website_media.validate().contains('.mov')){
-                String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-                vidlist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}" );
-              }else if(data.website_media.validate().contains('.jpeg') || data.website_media.validate().contains('.jpg') || data.website_media.validate().contains('.png')){
-                String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-                imglist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
-              }
+    setState(() {
+      _isloading = true;
+    });
+    await filterservermedia(last_id, categorySelectedData, isEnquiryData,
+            productSelectedData, blockSelectedData, slabSelectedData)
+        .then((value) {
+      if (value.data!.isNotEmpty) {
+        setState(() {
+          last_id = value.last_id;
+          List<String> imglist = [];
+          List<String> vidlist = [];
+          for (var data in value.data!) {
+            if (data.website_media.validate().contains('.mp4') ||
+                data.website_media.validate().contains('.MP4') ||
+                data.website_media.validate().contains('.MOV') ||
+                data.website_media.validate().contains('.mov')) {
+              String url = data.website_media
+                  .validate()
+                  .toString()
+                  .replaceFirst("http://", "https://");
+              vidlist.add(
+                  "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
+            } else if (data.website_media.validate().contains('.jpeg') ||
+                data.website_media.validate().contains('.jpg') ||
+                data.website_media.validate().contains('.png')) {
+              String url = data.website_media
+                  .validate()
+                  .toString()
+                  .replaceFirst("http://", "https://");
+              imglist.add(
+                  "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
             }
-            imageList.addAll(imglist);
-            print(imageList.length);
-            videoList.addAll(vidlist);
-            print(videoList.length);
-            last_id = value.last_id.validate();
-          });
-        }
-      }).catchError((e) {
-        setState(() {});
-        log(e.toString());
-      });
-      setState(() {
-        _isloading = false;
-      });
+          }
+          imageList.addAll(imglist);
+          print(imageList.length);
+          videoList.addAll(vidlist);
+          print(videoList.length);
+          last_id = value.last_id.validate();
+        });
+      }
+    }).catchError((e) {
+      setState(() {});
+      log(e.toString());
+    });
+    setState(() {
+      _isloading = false;
+    });
   }
 
-
-  Future filtermediadata(categorySelected, isEnquiry, productSelected, blockSelected, slabSelected) async {
+  Future filtermediadata(categorySelected, isEnquiry, productSelected,
+      blockSelected, slabSelected) async {
     hideKeyboard(context);
     print("kkk");
     print(categorySelected);
@@ -907,26 +964,41 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
       blockSelectedData = blockSelected;
       slabSelectedData = slabSelected;
     });
-    await filterservermedia(null, categorySelected, isEnquiry, productSelected, blockSelected, slabSelected).then((value) {
-      if(value.status == false){
+    await filterservermedia(null, categorySelected, isEnquiry, productSelected,
+            blockSelected, slabSelected)
+        .then((value) {
+      if (value.status == false) {
         toast("No data found");
         finish(context);
       }
-      if(value.data != null){
-        if(value.data!.isNotEmpty){
+      if (value.data != null) {
+        if (value.data!.isNotEmpty) {
           setState(() {
             List<String> imglist = [];
             List<String> vidlist = [];
             for (var data in value.data!) {
-              if(data.website_media.validate().contains('.mp4') || data.website_media.validate().contains('.MP4') || data.website_media.validate().contains('.mov') || data.website_media.validate().contains('.MOV')){
-                String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-                vidlist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
-              }else if(data.website_media.validate().contains('.jpeg') || data.website_media.validate().contains('.jpg') || data.website_media.validate().contains('.png')){
-                String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-                imglist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
+              if (data.website_media.validate().contains('.mp4') ||
+                  data.website_media.validate().contains('.MP4') ||
+                  data.website_media.validate().contains('.mov') ||
+                  data.website_media.validate().contains('.MOV')) {
+                String url = data.website_media
+                    .validate()
+                    .toString()
+                    .replaceFirst("http://", "https://");
+                vidlist.add(
+                    "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
+              } else if (data.website_media.validate().contains('.jpeg') ||
+                  data.website_media.validate().contains('.jpg') ||
+                  data.website_media.validate().contains('.png')) {
+                String url = data.website_media
+                    .validate()
+                    .toString()
+                    .replaceFirst("http://", "https://");
+                imglist.add(
+                    "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
               }
             }
-            imageList = imglist ;
+            imageList = imglist;
             print(imageList.length);
             videoList = vidlist;
             print(videoList.length);
@@ -944,279 +1016,299 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
   }
 
   void filterDialog() {
-    showInDialog(context, title: Text("Filter Media", style: boldTextStyle(), textAlign: TextAlign.justify), barrierColor: Colors.black45, backgroundColor: scaffoldBgColor,
-    builder: (context) {
-      return AddFilterDailog(filtermediadata : filtermediadata);
-      }
-    );
+    showInDialog(context,
+        title: Text("Filter Media",
+            style: boldTextStyle(), textAlign: TextAlign.justify),
+        barrierColor: Colors.black45,
+        backgroundColor: scaffoldBgColor, builder: (context) {
+      return AddFilterDailog(filtermediadata: filtermediadata);
+    });
   }
 
-  Future Refresh() async{
+  Future Refresh() async {
     print(last_id);
-      setState(() {
-        _isloading = true;
-      });
-      print(blockSelectedData);
-      print("ijij");
-      await filterservermedia(last_id, categorySelectedData, isEnquiryData, productSelectedData, blockSelectedData, slabSelectedData).then((value){
-        if(value.data!.isNotEmpty){
-          setState(() {
-            List<String> imglist = [];
-            List<String> vidlist = [];
-            for (var data in value.data!) {
-              if(data.website_media.validate().contains('.mp4') || data.website_media.validate().contains('.MP4') || data.website_media.validate().contains('.mov') || data.website_media.validate().contains('.MOV')){
-                String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-                vidlist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}" );
-              }else if(data.website_media.validate().contains('.jpeg') || data.website_media.validate().contains('.jpg') || data.website_media.validate().contains('.png')){
-                String url = data.website_media.validate().toString().replaceFirst("http://","https://");
-                imglist.add("$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}" );
-              }
+    setState(() {
+      _isloading = true;
+    });
+    print(blockSelectedData);
+    print("ijij");
+    await filterservermedia(last_id, categorySelectedData, isEnquiryData,
+            productSelectedData, blockSelectedData, slabSelectedData)
+        .then((value) {
+      if (value.data!.isNotEmpty) {
+        setState(() {
+          List<String> imglist = [];
+          List<String> vidlist = [];
+          for (var data in value.data!) {
+            if (data.website_media.validate().contains('.mp4') ||
+                data.website_media.validate().contains('.MP4') ||
+                data.website_media.validate().contains('.mov') ||
+                data.website_media.validate().contains('.MOV')) {
+              String url = data.website_media
+                  .validate()
+                  .toString()
+                  .replaceFirst("http://", "https://");
+              vidlist.add(
+                  "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
+            } else if (data.website_media.validate().contains('.jpeg') ||
+                data.website_media.validate().contains('.jpg') ||
+                data.website_media.validate().contains('.png')) {
+              String url = data.website_media
+                  .validate()
+                  .toString()
+                  .replaceFirst("http://", "https://");
+              imglist.add(
+                  "$url####@@@@####SB####@@@@####${data.block_name.validate()}####@@@@####SB####@@@@####${data.block_id.validate()}####@@@@####SB####@@@@####${data.product_name.validate()}");
             }
-            List<int> test = [1, 2, 3, 4, 5];
-            List<int> dd = [];
-            dd.addAll(test);
-            print("LIST: ${dd.reversed}");
-            imageList.addAll(imglist);
-            imageList.reversed;
-            print(imageList.length);
-            videoList.addAll(vidlist);
-            videoList.reversed;
-            print(videoList.length);
-            last_id = value.last_id.validate();
-          });
-        }
-      }).catchError((e) {
-        setState(() {});
-        log(e.toString());
-      });
-      setState(() {
-        _isloading = false;
-      });
+          }
+          List<int> test = [1, 2, 3, 4, 5];
+          List<int> dd = [];
+          dd.addAll(test);
+          print("LIST: ${dd.reversed}");
+          imageList.addAll(imglist);
+          imageList.reversed;
+          print(imageList.length);
+          videoList.addAll(vidlist);
+          videoList.reversed;
+          print(videoList.length);
+          last_id = value.last_id.validate();
+        });
+      }
+    }).catchError((e) {
+      setState(() {});
+      log(e.toString());
+    });
+    setState(() {
+      _isloading = false;
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: appImageBar(context, name: 'Upload Images', filter: filterDialog, reload: refresh ),
+        appBar: appImageBar(context,
+            name: 'Upload Images', filter: filterDialog, reload: refresh),
         body: isLoading == true
-        ? const Center(
-            child: SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                color: kPrimaryColor,
-                strokeWidth: 2,
-              ),
-            )
-        )
+            ? const Center(
+                child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: kPrimaryColor,
+                  strokeWidth: 2,
+                ),
+              ))
             : LiquidPullToRefresh(
-          color: Colors.white,
-          height: 100,
-          animSpeedFactor: 2,
-          backgroundColor: Colors.orange,
-          showChildOpacityTransition: true,
-          onRefresh: Refresh,
-          child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  HorizontalList(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: imageStatus.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        alignment: Alignment.topLeft,
-                        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
-                        margin: const EdgeInsets.only(left: 0, right: 8, top: 4, bottom: 4),
-                        decoration: BoxDecoration(
-                          color: selectIndex == index
-                              ? kPrimaryColor
-                              : scaffoldBgColor,
-                          borderRadius: BorderRadius.all(Radius.circular(defaultRadius)),
-                        ),
-                        child: FittedBox(
-                          child: Text(
-                            imageStatus[index],
-                            style: primaryTextStyle(size: 14, color: selectIndex == index ? white : Theme.of(context).iconTheme.color),
-                            textAlign: TextAlign.center,
-                          ).paddingSymmetric(horizontal: 25, vertical: 2),
-                        ),
-                      ).onTap(
-                            () {
-                          setState(() {
-                            selectIndex = index;
-                          });
-                        },
-                      );
-                    },
-                  ),
-                  10.height,
-                  if (is_long_press) ...[
-                    BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 5.0,
-                        sigmaY: 5.0,
-                      ),
-                      child: Container(
-                        color: Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                    Container(
-                      child: Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.network(
-                            _image,
-                            height: 300,
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                  if (is_gallary_image_long_press) ...[
-                    BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 5.0,
-                        sigmaY: 5.0,
-                      ),
-                      child: Container(
-                        color: Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                    Container(
-                      child: Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: CachedImageWidget(
-                            url: _gallary_image.toString(),
-                            height: 300,
-                            width: 300,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                  Expanded(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: (selectIndex == 0)
-                          ? buildGridView()
-                          : (_isloading == true)
-                          ? const Center(
-                          child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: kPrimaryColor,
-                              strokeWidth: 2,
+                color: Colors.white,
+                height: 100,
+                animSpeedFactor: 2,
+                backgroundColor: Colors.orange,
+                showChildOpacityTransition: true,
+                onRefresh: Refresh,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      HorizontalList(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: imageStatus.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            alignment: Alignment.topLeft,
+                            padding: const EdgeInsets.only(
+                                top: 8, bottom: 8, left: 12, right: 12),
+                            margin: const EdgeInsets.only(
+                                left: 0, right: 8, top: 4, bottom: 4),
+                            decoration: BoxDecoration(
+                              color: selectIndex == index
+                                  ? kPrimaryColor
+                                  : scaffoldBgColor,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(defaultRadius)),
                             ),
-                          )
-                      )
-                          :serverGridView(),
-                    ),
+                            child: FittedBox(
+                              child: Text(
+                                imageStatus[index],
+                                style: primaryTextStyle(
+                                    size: 14,
+                                    color: selectIndex == index
+                                        ? white
+                                        : Theme.of(context).iconTheme.color),
+                                textAlign: TextAlign.center,
+                              ).paddingSymmetric(horizontal: 25, vertical: 2),
+                            ),
+                          ).onTap(
+                            () {
+                              setState(() {
+                                selectIndex = index;
+                              });
+                            },
+                          );
+                        },
+                      ),
+                      10.height,
+                      if (is_long_press) ...[
+                        BackdropFilter(
+                          filter: ImageFilter.blur(
+                            sigmaX: 5.0,
+                            sigmaY: 5.0,
+                          ),
+                          child: Container(
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                        Container(
+                          child: Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                _image,
+                                height: 300,
+                                width: MediaQuery.of(context).size.width,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (is_gallary_image_long_press) ...[
+                        BackdropFilter(
+                          filter: ImageFilter.blur(
+                            sigmaX: 5.0,
+                            sigmaY: 5.0,
+                          ),
+                          child: Container(
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                        Container(
+                          child: Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: CachedImageWidget(
+                                url: _gallary_image.toString(),
+                                height: 300,
+                                width: 300,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      Expanded(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: (selectIndex == 0)
+                              ? buildGridView()
+                              : (_isloading == true)
+                                  ? const Center(
+                                      child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: kPrimaryColor,
+                                        strokeWidth: 2,
+                                      ),
+                                    ))
+                                  : serverGridView(),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-        ),
         floatingActionButton: (selectIndex == 0)
             ? (selectIndex == 0 && imagesList.isEmpty == false)
-            ? AddFloatingButton(
-          icon: FontAwesomeIcons.check,
-          onTap: () async{
-            addblockformData();
-            imageList = [];
-          },
-        )
-            : AddFloatingButton(
-          icon: FontAwesomeIcons.upload,
-          onTap: () async{
-            showModalBottomSheet(
-                context: context,
-                builder:(BuildContext context){
-                  return SizedBox(
-                    height: 150,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          MaterialButton(
-                            onPressed: () async {
-                              print("camera");
-                              PermissionStatus cameraStatus = await Permission.camera.request();
-                              if(cameraStatus == PermissionStatus.granted){
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Permission Granted")));
-                              }
-                              // if(cameraStatus == PermissionStatus.denied){
-                              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You need to provide camera permission")));
-                              // }
-                              // if(cameraStatus == PermissionStatus.permanentlyDenied){
-                              //   openAppSettings();
-                              // }
-                              getcam();
-                            },
-                            color: Colors.orange.shade700,
-                            textColor: Colors.white,
-                            padding: const EdgeInsets.all(16),
-                            shape: const CircleBorder(),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              size: 24,
-                            ),
-                          ),
-                          const Spacer(),
-                          MaterialButton(
-                              onPressed: getgalleryVideo,
-                              color: Colors.orange.shade700,
-                              textColor: Colors.white,
-                              padding: const EdgeInsets.all(16),
-                              shape: const CircleBorder(),
-                              child: const Icon(
-                                Icons.video_camera_back,
-                                size: 24,
+                ? AddFloatingButton(
+                    icon: FontAwesomeIcons.check,
+                    onTap: () async {
+                      addblockformData();
+                      imageList = [];
+                    },
+                  )
+                : AddFloatingButton(
+                    icon: FontAwesomeIcons.upload,
+                    onTap: () async {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 150,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Row(
+                                  children: [
+                                    MaterialButton(
+                                      onPressed: () async {
+                                        print("camera");
+                                        PermissionStatus cameraStatus =
+                                            await Permission.camera.request();
+                                        if (cameraStatus ==
+                                            PermissionStatus.granted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "Permission Granted")));
+                                        }
+                                        // if(cameraStatus == PermissionStatus.denied){
+                                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You need to provide camera permission")));
+                                        // }
+                                        // if(cameraStatus == PermissionStatus.permanentlyDenied){
+                                        //   openAppSettings();
+                                        // }
+                                        getcam();
+                                      },
+                                      color: Colors.orange.shade700,
+                                      textColor: Colors.white,
+                                      padding: const EdgeInsets.all(16),
+                                      shape: const CircleBorder(),
+                                      child: const Icon(
+                                        Icons.camera_alt,
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    MaterialButton(
+                                      onPressed: getgalleryVideo,
+                                      color: Colors.orange.shade700,
+                                      textColor: Colors.white,
+                                      padding: const EdgeInsets.all(16),
+                                      shape: const CircleBorder(),
+                                      child: const Icon(
+                                        Icons.video_camera_back,
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    MaterialButton(
+                                      onPressed: getgallery,
+                                      // _pickImagesFromGallery,
+                                      color: Colors.orange.shade700,
+                                      textColor: Colors.white,
+                                      padding: const EdgeInsets.all(16),
+                                      shape: const CircleBorder(),
+                                      child: const Icon(
+                                        Icons.photo,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                          ),
-                          const Spacer(),
-                          MaterialButton(
-                            onPressed: getgallery,
-                            // _pickImagesFromGallery,
-                            color: Colors.orange.shade700,
-                            textColor: Colors.white,
-                            padding: const EdgeInsets.all(16),
-                            shape: const CircleBorder(),
-                            child: const Icon(
-                              Icons.photo,
-                              size: 24,
-                            ),
-                          ),
-
-                        ],
-                      ),
-                    ),
-
-                  );
-
-                }
-            );
-          },
-        )
+                            );
+                          });
+                    },
+                  )
             : (mediaImageList.isNotEmpty)
-            ? AddFloatingButton(
-          icon: FontAwesomeIcons.check,
-          onTap: () async{
-            print("i");
-            await addblockformData();
-            mediaImageList = [];
-          },
-        )
-            : Container(),
-
-       ),
-      );
+                ? AddFloatingButton(
+                    icon: FontAwesomeIcons.check,
+                    onTap: () async {
+                      print("i");
+                      await addblockformData();
+                      mediaImageList = [];
+                    },
+                  )
+                : Container(),
+      ),
+    );
   }
-
-
 }

@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
+import 'dart:developer' as dev;
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
+import 'package:stoneindia/screen/otpscreen.dart';
 import 'package:stoneindia/screen/signup.dart';
 import 'package:stoneindia/utils/notification_send.dart';
 import 'package:stoneindia/utils/restapi.dart';
@@ -36,7 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     super.initState();
-    isfirst = widget.isfirst!;
+    isfirst = widget.isfirst ?? false;
     print("ISFIRST: $isfirst");
     init();
   }
@@ -139,10 +142,12 @@ class _SignInScreenState extends State<SignInScreen> {
         'country_code': country_code.validate().replaceAll("+", ""),
         'country_iso_code': country_iso_code.validate(),
       };
+      dev.log(req.toString(), name: "Login Request");
       setState(() {
         isLoading = true;
       });
       await login(req).then((value) async {
+        dev.log(value.toString(), name: "Login Response");
         if (value["status"] == true &&
             value["messages"] == "Login successfully!" &&
             value['role'] == "customer") {
@@ -159,7 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
           }
           // if(isfirst == true){
 
-          // await _fetchContacts();
+          await _fetchContacts();
           toast('Login Successfully');
           setState(() {
             isLoading = false;
@@ -350,7 +355,44 @@ class _SignInScreenState extends State<SignInScreen> {
                         shapeBorder:
                             RoundedRectangleBorder(borderRadius: radius()),
                         onTap: () async {
-                          saveForm();
+                          if (number == null) {
+                            toast("Please enter valid number!");
+                            return;
+                          }
+
+                          FirebaseAuth auth = FirebaseAuth.instance;
+                          await auth.verifyPhoneNumber(
+                            phoneNumber: number!,
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) async {
+                              await auth.signInWithCredential(credential);
+                              print("Automatic Verification Done");
+                            },
+                            verificationFailed: (FirebaseAuthException e) {
+                              print("Verification Failed: ${e.message}");
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Otpscreen(
+                                    mobile: number!,
+                                    verificationId: verificationId,
+                                    onVerificationDone: () async {
+                                      await saveForm();
+                                    },
+                                  ),
+                                ),
+                              );
+                              print("OTP Sent");
+                            },
+                            codeAutoRetrievalTimeout: (String verificationId) {
+                              print("Timeout");
+                            },
+                            //
+                          );
+                          // saveForm();
                         },
                         color: kPrimaryColor,
                         padding: const EdgeInsets.all(16),
@@ -367,6 +409,21 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                     ),
                   ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: TextButton(
+                  onPressed: () {
+                    // pop context
+                    const SBCustomerDashboard()
+                        .launch(context, isNewTask: true);
+                  },
+                  child: Text(
+                    "Skip",
+                    style: primaryTextStyle(
+                        size: 16, color: black, weight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
