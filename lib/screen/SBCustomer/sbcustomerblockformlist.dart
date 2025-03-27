@@ -132,10 +132,17 @@ class _CustomerBlockFormListWidgetState
                                         : widget.blockFormData![index].images!
                                                 .isNotEmpty
                                             ? SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    32,
+                                                width:
+                                                    //  MediaQuery.of(context)
+                                                    //             .size
+                                                    //             .width >
+                                                    //         500
+                                                    //     ? 500 - 32
+                                                    //     :
+                                                    (MediaQuery.of(context)
+                                                            .size
+                                                            .width) -
+                                                        32,
                                                 child:
                                                     cs.CarouselSlider.builder(
                                                   carouselController:

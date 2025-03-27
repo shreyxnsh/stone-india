@@ -18,215 +18,279 @@ import 'network_utils.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
-
 Future login(Map request) async {
-  return await (handleResponse(await buildHttpResponse('login', request: request, method: HttpMethod.POST)));
+  return await (handleResponse(await buildHttpResponse('login',
+      request: request, method: HttpMethod.POST)));
 }
 
 Future register(Map request) async {
-  return await (handleResponse(await buildHttpResponse('signup', request: request, method: HttpMethod.POST)));
+  return await (handleResponse(await buildHttpResponse('signup',
+      request: request, method: HttpMethod.POST)));
 }
 
 Future<BlockFormListModel> fetchblockform({int? last_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('get/block/form?last_id=$last_id', method: HttpMethod.GET)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'get/block/form?last_id=$last_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
-Future<BlockFormListModel> fetchcustomerblockform({int? last_id, int? customer_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('fetch/hold/block?last_id=$last_id&user_id=$customer_id', method: HttpMethod.GET)));
+Future<BlockFormListModel> fetchcustomerblockform(
+    {int? last_id, int? customer_id}) async {
+  final data = await (handleResponse(await buildHttpResponse(
+      'fetch/hold/block?last_id=$last_id&user_id=$customer_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
 Future<BlockFormListModel> fetchholdblockform({int? last_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('fetch/all/hold/blocks?last_id=$last_id', method: HttpMethod.GET)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'fetch/all/hold/blocks?last_id=$last_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
-Future<BlockFormListModel> fetchcustomerholdblockform({int? last_id, int? user_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('fetch/only/hold/block?user_id=$user_id&last_id=$last_id', method: HttpMethod.GET)));
+Future<BlockFormListModel> fetchcustomerholdblockform(
+    {int? last_id, int? user_id}) async {
+  final data = await (handleResponse(await buildHttpResponse(
+      'fetch/only/hold/block?user_id=$user_id&last_id=$last_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
 Future<BlockFormListModel> fetchsoldblockform({int? last_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('fetch/all/sold/blocks?last_id=$last_id', method: HttpMethod.GET)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'fetch/all/sold/blocks?last_id=$last_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
 Future addblock(Map request) async {
-  final data = await (handleResponse(await buildHttpResponse('add/block', request: request, method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse('add/block',
+      request: request, method: HttpMethod.POST)));
   return data;
 }
 
 Future deleteblock({int? form_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('delete/block?form_id=$form_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'delete/block?form_id=$form_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future deleteblockk({int? block_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('block/delete?block_id=$block_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'block/delete?block_id=$block_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future editblock({int? block_id, String? name}) async {
-  final data = await (handleResponse(await buildHttpResponse('update/block?block_id=$block_id&name=$name', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'update/block?block_id=$block_id&name=$name',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future editproduct({int? product_id, String? name}) async {
-  final data = await (handleResponse(await buildHttpResponse('update/product?product_id=$product_id&name=$name', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'update/product?product_id=$product_id&name=$name',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future editcategory({int? category_id, String? name}) async {
-  final data = await (handleResponse(await buildHttpResponse('update/category?category_id=$category_id&name=$name', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'update/category?category_id=$category_id&name=$name',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future editslab({int? slab_id, String? name}) async {
-  final data = await (handleResponse(await buildHttpResponse('update/slab?slab_id=$slab_id&name=$name', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'update/slab?slab_id=$slab_id&name=$name',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future deletecatagory({int? category_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('category/delete?category_id=$category_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'category/delete?category_id=$category_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future deleteproduct({int? product_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('product/delete?product_id=$product_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'product/delete?product_id=$product_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future deleteslab({int? slab_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('slab/delete?slab_id=$slab_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'slab/delete?slab_id=$slab_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future sendContact(Map request) async {
-  final data = await (handleResponse(await buildHttpResponse('fetch/contacts', request: request, method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse('fetch/contacts',
+      request: request, method: HttpMethod.POST)));
   return data;
 }
 
 Future<BlockListModel> fetchblock() async {
-  final data = await (handleResponse(await buildHttpResponse('get/block', method: HttpMethod.GET)));
+  final data = await (handleResponse(
+      await buildHttpResponse('get/block', method: HttpMethod.GET)));
   return BlockListModel.fromJson(data);
 }
 
 Future addproduct(Map request) async {
-  final data = await (handleResponse(await buildHttpResponse('add/product', request: request, method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse('add/product',
+      request: request, method: HttpMethod.POST)));
   return data;
 }
 
 Future<ProductListModel> fetchproduct() async {
-  final data = await (handleResponse(await buildHttpResponse('get/product', method: HttpMethod.GET)));
+  final data = await (handleResponse(
+      await buildHttpResponse('get/product', method: HttpMethod.GET)));
   return ProductListModel.fromJson(data);
 }
 
 Future addcategory(Map request) async {
-  final data = await (handleResponse(await buildHttpResponse('add/category', request: request, method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse('add/category',
+      request: request, method: HttpMethod.POST)));
   return data;
 }
 
 Future<CategoryListModel> fetchcategory() async {
-  final data = await (handleResponse(await buildHttpResponse('get/category', method: HttpMethod.GET)));
+  final data = await (handleResponse(
+      await buildHttpResponse('get/category', method: HttpMethod.GET)));
   return CategoryListModel.fromJson(data);
 }
 
 Future addslab(Map request) async {
-  final data = await (handleResponse(await buildHttpResponse('add/slab/type', request: request, method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse('add/slab/type',
+      request: request, method: HttpMethod.POST)));
   return data;
 }
 
 Future<SlabListModel> fetchslab() async {
-  final data = await (handleResponse(await buildHttpResponse('get/slab', method: HttpMethod.GET)));
+  final data = await (handleResponse(
+      await buildHttpResponse('get/slab', method: HttpMethod.GET)));
   return SlabListModel.fromJson(data);
 }
 
-Future<ServerMediaListModel> fetchmedia() async  {
-  return ServerMediaListModel.fromJson( await handleResponse(await buildHttpResponseFromSB('https://stonebharat.in/api/website_media/', method: HttpMethod.GET)));
+Future<ServerMediaListModel> fetchmedia() async {
+  return ServerMediaListModel.fromJson(await handleResponse(
+      await buildHttpResponseFromSB('https://stonebharat.in/api/website_media/',
+          method: HttpMethod.GET)));
 }
 
-Future<ServerMediaListModel> fetchservermedia({int? last_id}) async  {
-  return ServerMediaListModel.fromJson( await handleResponse(await buildHttpResponse('fetch/website/media?last_id=$last_id', method: HttpMethod.GET)));
+Future<ServerMediaListModel> fetchservermedia({int? last_id}) async {
+  return ServerMediaListModel.fromJson(await handleResponse(
+      await buildHttpResponse('fetch/website/media?last_id=$last_id',
+          method: HttpMethod.GET)));
 }
 
-Future<ServerMediaListModel> fetchmediafromnexturl(String? url) async  {
-  return ServerMediaListModel.fromJson( await handleResponse(await buildHttpResponseFromSB(url.validate(), method: HttpMethod.GET)));
+Future<ServerMediaListModel> fetchmediafromnexturl(String? url) async {
+  return ServerMediaListModel.fromJson(await handleResponse(
+      await buildHttpResponseFromSB(url.validate(), method: HttpMethod.GET)));
 }
 
-Future<List> fetchserverproduct() async  {
-  Iterable data =  await handleResponse(await buildHttpResponseFromSB('https://stonebharat.in/api/product/', method: HttpMethod.GET));
+Future<List> fetchserverproduct() async {
+  Iterable data = await handleResponse(await buildHttpResponseFromSB(
+      'https://stonebharat.in/api/product/',
+      method: HttpMethod.GET));
   List<String> list = [];
   for (var element in data) {
-    list.add("${element["product_name"]} ###@@@###SB###@@@### ${element["id"]}");
+    list.add(
+        "${element["product_name"]} ###@@@###SB###@@@### ${element["id"]}");
   }
   return list;
 }
 
-Future<List> fetchserverblock() async  {
-  Iterable data =  await handleResponse(await buildHttpResponseFromSB('https://stonebharat.in/api/readyblockdropdown/', method: HttpMethod.GET));
+Future<List> fetchserverblock() async {
+  Iterable data = await handleResponse(await buildHttpResponseFromSB(
+      'https://stonebharat.in/api/readyblockdropdown/',
+      method: HttpMethod.GET));
   List<String> list = [];
   for (var element in data) {
-    list.add("${element["block_number"]} ###@@@###SB###@@@### ${element["id"]}");
+    list.add(
+        "${element["block_number"]} ###@@@###SB###@@@### ${element["id"]}");
   }
   return list;
 }
 
-Future<ServerMediaListModel> filtermedia(typeSelected, isEnquiry, productSelected, blockSelected) async  {
+Future<ServerMediaListModel> filtermedia(
+    typeSelected, isEnquiry, productSelected, blockSelected) async {
   var url = 'https://stonebharat.in/api/website_media/';
-  if(typeSelected != null || isEnquiry != null || productSelected != null || blockSelected!= null){
+  if (typeSelected != null ||
+      isEnquiry != null ||
+      productSelected != null ||
+      blockSelected != null) {
     url = '$url?';
-    if(typeSelected != null){
+    if (typeSelected != null) {
       url = '${url}type=$typeSelected&';
     }
-    if(isEnquiry != null){
+    if (isEnquiry != null) {
       url = '${url}product_type=$isEnquiry&';
     }
-    if(productSelected != null){
+    if (productSelected != null) {
       url = '${url}factory_product=$productSelected&';
     }
-    if(blockSelected != null){
+    if (blockSelected != null) {
       url = '${url}block=$blockSelected&';
     }
   }
   print("URL: ");
   print(url);
-  return ServerMediaListModel.fromJson( await handleResponse(
+  return ServerMediaListModel.fromJson(await handleResponse(
       await buildHttpResponseFromSB(url.validate(), method: HttpMethod.GET)));
 }
 
-Future<ServerMediaListModel> filterservermedia(lastId, categorySelected, isEnquiry, productSelected, blockSelected, slabSelected) async  {
+Future<ServerMediaListModel> filterservermedia(lastId, categorySelected,
+    isEnquiry, productSelected, blockSelected, slabSelected) async {
   var url = 'fetch/website/media?last_id=$lastId&';
-  if(categorySelected != null || isEnquiry != null || productSelected != null || blockSelected!= null || slabSelected != null){
-    if(categorySelected != null){
+  if (categorySelected != null ||
+      isEnquiry != null ||
+      productSelected != null ||
+      blockSelected != null ||
+      slabSelected != null) {
+    if (categorySelected != null) {
       url = '${url}category_name=$categorySelected&';
     }
-    if(isEnquiry != null){
+    if (isEnquiry != null) {
       url = '${url}type=$isEnquiry&';
     }
-    if(productSelected != null){
+    if (productSelected != null) {
       url = '${url}product_name=$productSelected&';
     }
-    if(blockSelected != null){
+    if (blockSelected != null) {
       url = '${url}block=$blockSelected&';
     }
-    if(slabSelected != null){
+    if (slabSelected != null) {
       url = '${url}slab_type=$slabSelected&';
     }
   }
   print("URL: ");
   print(url);
-  return ServerMediaListModel.fromJson( await handleResponse(
+  return ServerMediaListModel.fromJson(await handleResponse(
       await buildHttpResponse(url.validate(), method: HttpMethod.GET)));
 }
 
 Future<ProfileModel> getUserProfile(int? id, String? role) async {
-  var data =  ProfileModel.fromJson(await (handleResponse(await buildHttpResponse('get/details?user_id=$id&role=$role', method: HttpMethod.POST))));
+  var data = ProfileModel.fromJson(await (handleResponse(
+      await buildHttpResponse('get/details?user_id=$id&role=$role',
+          method: HttpMethod.POST))));
   return data;
 }
 
 Future<NotificationListModel> getnotification({int? user_id}) async {
-  var data =  NotificationListModel.fromJson(await (handleResponse(await buildHttpResponse('get/notification?user_id=$user_id', method: HttpMethod.POST))));
+  var data = NotificationListModel.fromJson(await (handleResponse(
+      await buildHttpResponse('get/notification?user_id=$user_id',
+          method: HttpMethod.POST))));
   return data;
 }
 
@@ -250,7 +314,7 @@ Future sendContactJsonFile(Map data, {String? filePath}) async {
     File dd = File(filePath.toString());
     if (dd.existsSync()) {
       print("exist");
-      multiPartRequest.files.add( http.MultipartFile(
+      multiPartRequest.files.add(http.MultipartFile(
           'json_file', dd.readAsBytes().asStream(), dd.lengthSync(),
           filename: dd.toString().split('/').last.split('\'')[0]));
     } else {
@@ -258,24 +322,24 @@ Future sendContactJsonFile(Map data, {String? filePath}) async {
     }
   }
   multiPartRequest.headers.addAll(buildHeaderTokens());
-  http.Response response = await http.Response.fromStream(await multiPartRequest.send());
+  http.Response response =
+      await http.Response.fromStream(await multiPartRequest.send());
   print("Response: ");
   print(response.body);
   if (response.statusCode.isSuccessful()) {
-
-    if(jsonDecode(response.body)['status'] == false){
+    if (jsonDecode(response.body)['status'] == false) {
       toast(jsonDecode(response.body)['messages']);
       return true;
     }
 
     return true;
-  }else {
+  } else {
     return false;
   }
-  return false;
 }
 
-Future<bool> addBlockForm(Map data, List<String> mediaList, {List<String>? file, String? toastMessage}) async {
+Future<bool> addBlockForm(Map data, List<String> mediaList,
+    {List<String>? file, String? toastMessage}) async {
   var multiPartRequest = await getMultiPartRequest('add/block/details');
   multiPartRequest.fields['user_id'] = data['user_id'];
   multiPartRequest.fields['block_name'] = data['block_name'];
@@ -288,7 +352,7 @@ Future<bool> addBlockForm(Map data, List<String> mediaList, {List<String>? file,
   multiPartRequest.fields['slab_thickness'] = data['slab_thickness'];
   multiPartRequest.fields['total_slabs'] = data['total_slabs'];
 
-  if(mediaList.isNotEmpty){
+  if (mediaList.isNotEmpty) {
     String listJson = mediaList.join(',');
     multiPartRequest.fields['website_media'] = listJson;
   }
@@ -299,7 +363,7 @@ Future<bool> addBlockForm(Map data, List<String> mediaList, {List<String>? file,
         File dd = File(file[i].toString());
         if (dd.existsSync()) {
           print("exist");
-          multiPartRequest.files.add( http.MultipartFile(
+          multiPartRequest.files.add(http.MultipartFile(
               'image[]', dd.readAsBytes().asStream(), dd.lengthSync(),
               filename: dd.toString().split('/').last.split('\'')[0]));
         } else {
@@ -309,15 +373,13 @@ Future<bool> addBlockForm(Map data, List<String> mediaList, {List<String>? file,
     }
   }
 
-
-
   multiPartRequest.headers.addAll(buildHeaderTokens());
-  http.Response response = await http.Response.fromStream(await multiPartRequest.send());
+  http.Response response =
+      await http.Response.fromStream(await multiPartRequest.send());
   print("Response: ");
   print(response.body);
   if (response.statusCode.isSuccessful()) {
-
-    if(jsonDecode(response.body)['status'] == false){
+    if (jsonDecode(response.body)['status'] == false) {
       toast(jsonDecode(response.body)['messages']);
       return true;
     }
@@ -325,15 +387,15 @@ Future<bool> addBlockForm(Map data, List<String> mediaList, {List<String>? file,
     toast(toastMessage ?? 'Block added successfully');
 
     return true;
-  }else {
+  } else {
     toast(errorSomethingWentWrong);
     return false;
   }
   return false;
 }
 
-
-Future<bool> editBlockForm(Map data, List<String> mediaList, {List<String>? file, String? toastMessage}) async {
+Future<bool> editBlockForm(Map data, List<String> mediaList,
+    {List<String>? file, String? toastMessage}) async {
   var multiPartRequest = await getMultiPartRequest('edit/block');
   multiPartRequest.fields['block_id'] = data['block_id'];
   multiPartRequest.fields['user_id'] = data['user_id'];
@@ -347,7 +409,7 @@ Future<bool> editBlockForm(Map data, List<String> mediaList, {List<String>? file
   multiPartRequest.fields['slab_thickness'] = data['slab_thickness'];
   multiPartRequest.fields['total_slabs'] = data['total_slabs'];
 
-  if(mediaList.isNotEmpty){
+  if (mediaList.isNotEmpty) {
     String listJson = mediaList.join(',');
     multiPartRequest.fields['website_media'] = listJson;
   }
@@ -358,7 +420,7 @@ Future<bool> editBlockForm(Map data, List<String> mediaList, {List<String>? file
         File dd = File(file[i].toString());
         if (dd.existsSync()) {
           print("exist");
-          multiPartRequest.files.add( http.MultipartFile(
+          multiPartRequest.files.add(http.MultipartFile(
               'image[]', dd.readAsBytes().asStream(), dd.lengthSync(),
               filename: dd.toString().split('/').last.split('\'')[0]));
         } else {
@@ -369,12 +431,12 @@ Future<bool> editBlockForm(Map data, List<String> mediaList, {List<String>? file
   }
 
   multiPartRequest.headers.addAll(buildHeaderTokens());
-  http.Response response = await http.Response.fromStream(await multiPartRequest.send());
+  http.Response response =
+      await http.Response.fromStream(await multiPartRequest.send());
   print("Response: ");
   print(response.body);
   if (response.statusCode.isSuccessful()) {
-
-    if(jsonDecode(response.body)['status'] == false){
+    if (jsonDecode(response.body)['status'] == false) {
       toast(jsonDecode(response.body)['messages']);
       return true;
     }
@@ -382,15 +444,14 @@ Future<bool> editBlockForm(Map data, List<String> mediaList, {List<String>? file
     toast(toastMessage ?? 'Block updated successfully');
 
     return true;
-  }else {
+  } else {
     toast(errorSomethingWentWrong);
     return false;
   }
   return false;
 }
 
-
-Future<File> saveImagePermanently(String imagePath) async{
+Future<File> saveImagePermanently(String imagePath) async {
   print(imagePath);
   final directory = await getExternalStorageDirectory();
   final name = path.basename(imagePath);
@@ -416,12 +477,12 @@ Future<bool> updateProfile(Map data, {File? file, String? toastMessage}) async {
         filename: file.toString().split('/').last.split('\'')[0]));
   }
   multiPartRequest.headers.addAll(buildHeaderTokens());
-  http.Response response = await http.Response.fromStream(await multiPartRequest.send());
+  http.Response response =
+      await http.Response.fromStream(await multiPartRequest.send());
   print("Response: ");
   print(response.body);
   if (response.statusCode.isSuccessful()) {
-
-    if(jsonDecode(response.body)['status'] == false){
+    if (jsonDecode(response.body)['status'] == false) {
       toast(jsonDecode(response.body)['messages']);
       return true;
     }
@@ -437,89 +498,136 @@ Future<bool> updateProfile(Map data, {File? file, String? toastMessage}) async {
     toast(toastMessage ?? 'Profile updated successfully');
 
     return true;
-  }else {
+  } else {
     toast(errorSomethingWentWrong);
     return false;
   }
 }
 
 Future holdblock({int? form_id, int? customer_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('hold/block?form_id=$form_id&customer_id=$customer_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'hold/block?form_id=$form_id&customer_id=$customer_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future holdblockteam({int? form_id, int? team_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('hold/block/team?form_id=$form_id&team_id=$team_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'hold/block/team?form_id=$form_id&team_id=$team_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future soldblock({int? form_id, int? team_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('sold/block?form_id=$form_id&team_id=$team_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'sold/block?form_id=$form_id&team_id=$team_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future unsoldblock({int? form_id, int? team_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('unsold/block?form_id=$form_id&team_id=$team_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'unsold/block?form_id=$form_id&team_id=$team_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future unholdblock({int? form_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('unhold/block/team?form_id=$form_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'unhold/block/team?form_id=$form_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future sendenquiry({int? customer_id, String? usernumber}) async {
-  final data = await (handleResponse(await buildHttpResponse('add/inquiry?user_id=$customer_id&user_number=$usernumber', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'add/inquiry?user_id=$customer_id&user_number=$usernumber',
+      method: HttpMethod.POST)));
   return data;
 }
 
-Future getallphotosonwhatsapp({int? block_id, int? user_id}) async{
-  final data = await( handleResponse(await buildHttpResponse('send/block/request?block_id=$block_id&user_id=$user_id',method:HttpMethod.POST )));
+Future getallphotosonwhatsapp({int? block_id, int? user_id}) async {
+  final data = await (handleResponse(await buildHttpResponse(
+      'send/block/request?block_id=$block_id&user_id=$user_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
-Future deleteAccount({int? userid}) async{
-  return await handleResponse(await buildHttpResponse('delete/user?user_id=$userid', method: HttpMethod.POST));
+Future deleteAccount({int? userid}) async {
+  return await handleResponse(await buildHttpResponse(
+      'delete/user?user_id=$userid',
+      method: HttpMethod.POST));
 }
 
-Future fetchTermsAndCondition() async{
-  return await (handleResponse(await buildHttpResponse('terms-and-conditions/fetch', method: HttpMethod.GET)));
+Future fetchTermsAndCondition() async {
+  return await (handleResponse(await buildHttpResponse(
+      'terms-and-conditions/fetch',
+      method: HttpMethod.GET)));
 }
 
-Future aboutUs() async{
-  return await (handleResponse(await buildHttpResponse('about/us/setting/fetch', method: HttpMethod.GET)));
+Future aboutUs() async {
+  return await (handleResponse(await buildHttpResponse('about/us/setting/fetch',
+      method: HttpMethod.GET)));
 }
 
-Future<BlockFormListModel> cataloguecustomerfilter({int? user_id, int? last_id, String? selectedType,String? selectedProduct, String? selectedBlock, String? selectedCategory,String? selectedSlab, String? slab_thickness}) async{
-  final data = await(handleResponse(await buildHttpResponse('filter/customer/blocks?user_id=$user_id&type=$selectedType&block=$selectedBlock&product=$selectedProduct&category=$selectedCategory&slab_type=$selectedSlab&slab_thickness=$slab_thickness&last_id=$last_id',method: HttpMethod.GET)));
+Future<BlockFormListModel> cataloguecustomerfilter(
+    {int? user_id,
+    int? last_id,
+    String? selectedType,
+    String? selectedProduct,
+    String? selectedBlock,
+    String? selectedCategory,
+    String? selectedSlab,
+    String? slab_thickness}) async {
+  final data = await (handleResponse(await buildHttpResponse(
+      'filter/customer/blocks?user_id=$user_id&type=$selectedType&block=$selectedBlock&product=$selectedProduct&category=$selectedCategory&slab_type=$selectedSlab&slab_thickness=$slab_thickness&last_id=$last_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
-Future<BlockFormListModel> cataloguefilter({int? last_id, String? selectedType,String? selectedProduct, String? selectedBlock, String? selectedCategory,String? selectedSlab, String? slab_thickness, String? date}) async{
-  final data = await(handleResponse(await buildHttpResponse('filter/blocks?type=$selectedType&block=$selectedBlock&product=$selectedProduct&category=$selectedCategory&slab_type=$selectedSlab&slab_thickness=$slab_thickness&date=$date&last_id=$last_id',method: HttpMethod.GET)));
+Future<BlockFormListModel> cataloguefilter(
+    {int? last_id,
+    String? selectedType,
+    String? selectedProduct,
+    String? selectedBlock,
+    String? selectedCategory,
+    String? selectedSlab,
+    String? slab_thickness,
+    String? date}) async {
+  final data = await (handleResponse(await buildHttpResponse(
+      'filter/blocks?type=$selectedType&block=$selectedBlock&product=$selectedProduct&category=$selectedCategory&slab_type=$selectedSlab&slab_thickness=$slab_thickness&date=$date&last_id=$last_id',
+      method: HttpMethod.GET)));
   return BlockFormListModel.fromJson(data);
 }
 
-Future accountDeleteStatus(int? userid) async{
-  return await (handleResponse(await buildHttpResponse('check/account/delete/status?user_id=$userid', method: HttpMethod.GET)));
+Future accountDeleteStatus(int? userid) async {
+  return await (handleResponse(await buildHttpResponse(
+      'check/account/delete/status?user_id=$userid',
+      method: HttpMethod.GET)));
 }
 
 Future<ThicknessListModel> fetchthicknesslist() async {
-  final data = await (handleResponse(await buildHttpResponse('get/thickness', method: HttpMethod.GET)));
+  final data = await (handleResponse(
+      await buildHttpResponse('get/thickness', method: HttpMethod.GET)));
   return ThicknessListModel.fromJson(data);
 }
 
 Future addthickness(Map request) async {
-  final data = await (handleResponse(await buildHttpResponse('add/thickness', request: request, method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse('add/thickness',
+      request: request, method: HttpMethod.POST)));
   return data;
 }
 
 Future deletethickness({int? thickness_id}) async {
-  final data = await (handleResponse(await buildHttpResponse('thickness/delete?thickness_id=$thickness_id', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'thickness/delete?thickness_id=$thickness_id',
+      method: HttpMethod.POST)));
   return data;
 }
 
 Future editthickness({int? thickness_id, String? name}) async {
-  final data = await (handleResponse(await buildHttpResponse('update/thickness?thickness_id=$thickness_id&name=$name', method: HttpMethod.POST)));
+  final data = await (handleResponse(await buildHttpResponse(
+      'update/thickness?thickness_id=$thickness_id&name=$name',
+      method: HttpMethod.POST)));
   return data;
 }

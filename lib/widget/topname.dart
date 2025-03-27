@@ -53,6 +53,8 @@ class TopNameWidget extends StatelessWidget {
                           ? const SizedBox.shrink()
                           : Text(
                               ' ${getStringAsync(FIRST_NAME).toString()} ${getStringAsync(LAST_NAME).toString()}',
+
+                              // "Ankit Singhal",
                               style: boldTextStyle(size: 20)),
                     ],
                   ),

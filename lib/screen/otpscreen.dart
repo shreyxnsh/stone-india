@@ -32,7 +32,35 @@ class _OtpscreenState extends State<Otpscreen> {
     super.initState();
   }
 
+  // // resend otp
+  // Future<void> resendOTP() async {
+  //   await auth.verifyPhoneNumber(
+  //     phoneNumber: widget.mobile,
+  //     verificationCompleted: (PhoneAuthCredential credential) {},
+  //     verificationFailed: (FirebaseAuthException e) {
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         content: Text(e.message!),
+  //       ));
+  //     },
+  //     codeSent: (String verificationId, int? resendToken) {},
+  //     codeAutoRetrievalTimeout: (String verificationId) {},
+  //   );
+  // }
+
   Future<void> verifyOTP() async {
+    if (otpController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please enter OTP"),
+      ));
+      return;
+    }
+    if (otpController.text.length != 6) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Invalid OTP"),
+      ));
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });

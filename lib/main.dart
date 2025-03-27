@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,38 +23,37 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> requestTrackingPermission() async {
-  final status = await AppTrackingTransparency.requestTrackingAuthorization();
-  print("Tracking Permission: $status");
+Future<void> appTracking() async {
+  final TrackingStatus status =
+      await AppTrackingTransparency.trackingAuthorizationStatus;
 
-  // if (await AppTrackingTransparency.trackingAuthorizationStatus ==
-  //     TrackingStatus.notDetermined) {
-  //   // Show a custom explainer dialog before the system dialog
-  //   await showCustomTrackingDialog(context);
-  //   // Wait for dialog popping animation
-  //   await Future.delayed(const Duration(milliseconds: 200));
-  //   // Request system's tracking authorization dialog
-  //   await AppTrackingTransparency.requestTrackingAuthorization();
-  // }
+  while (status == TrackingStatus.notDetermined) {
+    await Future.delayed(const Duration(seconds: 1));
+    final TrackingStatus newStatus =
+        await AppTrackingTransparency.requestTrackingAuthorization();
+    if (newStatus != TrackingStatus.notDetermined) {
+      break;
+    }
+  }
 }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  log(FirebaseAuth.instance.currentUser.toString());
-
-  await requestTrackingPermission();
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  LocalNotificationService.initialize();
-
-  await initialize();
-  await initPlatformState();
+Future<void> tempLogin() async {
+  if (getBoolAsync(IS_LOGGED_IN) == true) {
+    return;
+  }
   Map req = {
     'whatsapp_number': "911111111110",
     'fcm_token': "",
     'country_code': "91",
     'country_iso_code': "IN",
   };
+
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.appAttest,
+  );
+
   await login(req).then((value) async {
     if (value["status"] == true &&
         value["messages"] == "Login successfully!" &&
@@ -68,9 +68,6 @@ void main() async {
       if (value["data"]["profile_img"] != null) {
         setValue(PROFILE_IMAGE, value["data"]["profile_img"]);
       }
-      // if(isfirst == true){
-
-      // toast('Login Successfully');
     } else if (value["status"] == true &&
         value["messages"] == "Login successfully!" &&
         value['role'] == "team") {
@@ -92,6 +89,22 @@ void main() async {
   }).catchError((e) {
     log(e.toString());
   });
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  log(FirebaseAuth.instance.currentUser.toString());
+  // lock to portrait
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  LocalNotificationService.initialize();
+
+  await initialize();
+  await initPlatformState();
+  tempLogin();
+  appTracking();
   runApp(const MyApp());
 }
 

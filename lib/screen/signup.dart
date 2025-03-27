@@ -178,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               }
               // if(isfirst == true){
 
-              await _fetchContacts();
+              // await _fetchContacts();
               toast('Login Successfully');
               setState(() {
                 isLoading = false;
@@ -277,237 +277,252 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: scaffoldBgColor,
-        body: Form(
-          key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/logo.png', height: 200, width: 200),
-                    16.height,
-                    RichTextWidget(
-                      list: [
-                        TextSpan(
-                          text: appFirstName,
-                          style: boldTextStyle(
-                            size: 32,
-                            letterSpacing: 1,
-                            color: kPrimaryColor,
+        body: Center(
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: 500,
+              maxHeight: MediaQuery.of(context).size.height,
+            ),
+            child: Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/logo.png', height: 200, width: 200),
+                        16.height,
+                        RichTextWidget(
+                          list: [
+                            TextSpan(
+                              text: appFirstName,
+                              style: boldTextStyle(
+                                size: 32,
+                                letterSpacing: 1,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                            TextSpan(
+                              text: appSecondName,
+                              style: primaryTextStyle(
+                                size: 32,
+                                letterSpacing: 1,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                          ],
+                        ).center(),
+                        32.height,
+                        AppTextField(
+                          textStyle: primaryTextStyle(color: darkerText),
+                          controller: firstNameCont,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: textInputStyle(
+                            context: context,
+                            label: 'First Name',
+                            isMandatory: true,
+                            suffixIcon: commonImage(
+                              imageUrl: "assets/icons/user.png",
+                              size: 10,
+                            ),
                           ),
+                          focus: firstNameFocus,
+                          errorThisFieldRequired: "First Name Is Required",
+                          nextFocus: lastNameFocus,
                         ),
-                        TextSpan(
-                          text: appSecondName,
-                          style: primaryTextStyle(
-                            size: 32,
-                            letterSpacing: 1,
-                            color: kPrimaryColor,
+                        16.height,
+                        AppTextField(
+                          textStyle: primaryTextStyle(color: darkerText),
+                          controller: lastNameCont,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: textInputStyle(
+                            context: context,
+                            label: 'Last Name',
+                            isMandatory: true,
+                            suffixIcon: commonImage(
+                              imageUrl: "assets/icons/user.png",
+                              size: 10,
+                            ),
                           ),
+                          focus: lastNameFocus,
+                          errorThisFieldRequired: 'Last Name Is Required',
                         ),
-                      ],
-                    ).center(),
-                    32.height,
-                    AppTextField(
-                      textStyle: primaryTextStyle(color: darkerText),
-                      controller: firstNameCont,
-                      textFieldType: TextFieldType.NAME,
-                      decoration: textInputStyle(
-                        context: context,
-                        label: 'First Name',
-                        isMandatory: true,
-                        suffixIcon: commonImage(
-                          imageUrl: "assets/icons/user.png",
-                          size: 10,
-                        ),
-                      ),
-                      focus: firstNameFocus,
-                      errorThisFieldRequired: "First Name Is Required",
-                      nextFocus: lastNameFocus,
-                    ),
-                    16.height,
-                    AppTextField(
-                      textStyle: primaryTextStyle(color: darkerText),
-                      controller: lastNameCont,
-                      textFieldType: TextFieldType.NAME,
-                      decoration: textInputStyle(
-                        context: context,
-                        label: 'Last Name',
-                        isMandatory: true,
-                        suffixIcon: commonImage(
-                          imageUrl: "assets/icons/user.png",
-                          size: 10,
-                        ),
-                      ),
-                      focus: lastNameFocus,
-                      errorThisFieldRequired: 'Last Name Is Required',
-                    ),
-                    16.height,
-                    Padding(
-                      padding: const EdgeInsets.all(1),
-                      child: IntlPhoneField(
-                        disableLengthCheck: false,
-                        cursorColor: kPrimaryColor,
-                        decoration: textInputStyle(
-                          context: context,
-                          label: 'Whatsapp Number',
-                          isMandatory: true,
-                          suffixIcon: commonImage(
-                            imageUrl: "assets/icons/user.png",
-                            size: 10,
-                          ),
-                        ),
-                        initialCountryCode: country_iso_code,
-                        onChanged: (phone) {
-                          setState(() {
-                            // country_name_code = phone.countryISOCode;
-                            number = phone.completeNumber;
-                            country_code = phone.countryCode;
-                            country_iso_code = phone.countryISOCode;
-                          });
-                        },
-                      ),
-                    ),
-                    40.height,
-                    if (isLoading == true)
-                      AppButton(
-                          width: context.width(),
-                          shapeBorder:
-                              RoundedRectangleBorder(borderRadius: radius()),
-                          onTap: () {
-                            toast("Please wait! Loading..");
-                          },
-                          color: kPrimaryColor,
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Submit",
-                                  style: boldTextStyle(
-                                      color: textPrimaryWhiteColor)),
-                              10.width,
-                              const SizedBox(
-                                height: 15,
-                                width: 15,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            ],
-                          )),
-                    if (isLoading == false)
-                      AppButton(
-                        width: context.width(),
-                        shapeBorder:
-                            RoundedRectangleBorder(borderRadius: radius()),
-                        onTap: () async {
-                          if (number == null) {
-                            toast("Please enter valid details!");
-                            return;
-                          }
-                          if (firstNameCont.text.isEmpty ||
-                              lastNameCont.text.isEmpty ||
-                              number!.isEmpty) {
-                            toast("Please enter valid details!");
-                            return;
-                          }
-                          log("I am here, Phone number ${number!}");
-                          Map req = {
-                            'whatsapp_number':
-                                number.toString().replaceAll("+", ""),
-                            'fcm_token': getStringAsync(FCM_TOKEN).toString(),
-                            'country_code':
-                                country_code.validate().replaceAll("+", ""),
-                            'country_iso_code': country_iso_code.validate(),
-                          };
-                          bool isUserExists = false;
-                          await login(req).then((value) async {
-                            if (value["status"] == true &&
-                                value["messages"] == "Login successfully!" &&
-                                value['role'] == "customer") {
-                              isUserExists = true;
-                              toastLong('User already exists');
-                            }
-                          }).catchError((e) {});
-
-                          if (isUserExists) {
-                            dev.log("User already exists");
-                            return;
-                          }
-
-                          FirebaseAuth auth = FirebaseAuth.instance;
-                          await auth.verifyPhoneNumber(
-                            phoneNumber: number!,
-                            verificationCompleted:
-                                (PhoneAuthCredential credential) async {
-                              await auth.signInWithCredential(credential);
-                              print("Automatic Verification Done");
+                        16.height,
+                        Padding(
+                          padding: const EdgeInsets.all(1),
+                          child: IntlPhoneField(
+                            disableLengthCheck: false,
+                            cursorColor: kPrimaryColor,
+                            decoration: textInputStyle(
+                              context: context,
+                              label: 'Whatsapp Number',
+                              isMandatory: true,
+                              suffixIcon: commonImage(
+                                imageUrl: "assets/icons/user.png",
+                                size: 10,
+                              ),
+                            ),
+                            initialCountryCode: country_iso_code,
+                            onChanged: (phone) {
+                              setState(() {
+                                // country_name_code = phone.countryISOCode;
+                                number = phone.completeNumber;
+                                country_code = phone.countryCode;
+                                country_iso_code = phone.countryISOCode;
+                              });
                             },
-                            verificationFailed: (FirebaseAuthException e) {
-                              print("Verification Failed: ${e.message}");
-                            },
-                            codeSent:
-                                (String verificationId, int? resendToken) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Otpscreen(
-                                    mobile: number!,
-                                    verificationId: verificationId,
-                                    onVerificationDone: () async {
-                                      await signUp();
-                                    },
-                                  ),
-                                ),
+                          ),
+                        ),
+                        40.height,
+                        if (isLoading == true)
+                          AppButton(
+                              width: context.width(),
+                              shapeBorder: RoundedRectangleBorder(
+                                  borderRadius: radius()),
+                              onTap: () {
+                                toast("Please wait! Loading..");
+                              },
+                              color: kPrimaryColor,
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Submit",
+                                      style: boldTextStyle(
+                                          color: textPrimaryWhiteColor)),
+                                  10.width,
+                                  const SizedBox(
+                                    height: 15,
+                                    width: 15,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                ],
+                              )),
+                        if (isLoading == false)
+                          AppButton(
+                            width: context.width(),
+                            shapeBorder:
+                                RoundedRectangleBorder(borderRadius: radius()),
+                            onTap: () async {
+                              if (number == null) {
+                                toast("Please enter valid details!");
+                                return;
+                              }
+                              if (firstNameCont.text.isEmpty ||
+                                  lastNameCont.text.isEmpty ||
+                                  number!.isEmpty) {
+                                toast("Please enter valid details!");
+                                return;
+                              }
+                              log("I am here, Phone number ${number!}");
+                              Map req = {
+                                'whatsapp_number':
+                                    number.toString().replaceAll("+", ""),
+                                'fcm_token':
+                                    getStringAsync(FCM_TOKEN).toString(),
+                                'country_code':
+                                    country_code.validate().replaceAll("+", ""),
+                                'country_iso_code': country_iso_code.validate(),
+                              };
+                              bool isUserExists = false;
+                              await login(req).then((value) async {
+                                if (value["status"] == true &&
+                                    value["messages"] ==
+                                        "Login successfully!" &&
+                                    value['role'] == "customer") {
+                                  isUserExists = true;
+                                  toastLong('User already exists');
+                                }
+                              }).catchError((e) {});
+                              if (isUserExists) {
+                                dev.log("User already exists");
+                                return;
+                              }
+
+                              FirebaseAuth auth = FirebaseAuth.instance;
+                              // await auth.setSettings(
+                              //     appVerificationDisabledForTesting: true);
+                              await auth.verifyPhoneNumber(
+                                phoneNumber: number!,
+                                verificationCompleted:
+                                    (PhoneAuthCredential credential) async {
+                                  await auth.signInWithCredential(credential);
+                                  print("Automatic Verification Done");
+                                },
+                                verificationFailed: (FirebaseAuthException e) {
+                                  print("Verification Failed: ${e.message}");
+                                },
+                                codeSent:
+                                    (String verificationId, int? resendToken) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Otpscreen(
+                                        mobile: number!,
+                                        verificationId: verificationId,
+                                        onVerificationDone: () async {
+                                          await signUp();
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                  print("OTP Sent");
+                                },
+                                codeAutoRetrievalTimeout:
+                                    (String verificationId) {
+                                  print("Timeout");
+                                },
+                                //
                               );
-                              print("OTP Sent");
-                            },
-                            codeAutoRetrievalTimeout: (String verificationId) {
-                              print("Timeout");
-                            },
-                            //
-                          );
 
-                          // await signUp();
-                        },
-                        color: kPrimaryColor,
-                        padding: const EdgeInsets.all(16),
-                        child: Text('Submit',
-                            style: boldTextStyle(color: textPrimaryWhiteColor)),
+                              // await signUp();
+                            },
+                            color: kPrimaryColor,
+                            padding: const EdgeInsets.all(16),
+                            child: Text('Submit',
+                                style: boldTextStyle(
+                                    color: textPrimaryWhiteColor)),
+                          ),
+                        24.height,
+                        loginRegisterWidget(context,
+                            title: 'Already A Member',
+                            subTitle: 'Login', onTap: () {
+                          const SignInScreen(
+                            isfirst: false,
+                          ).launch(context, isNewTask: true);
+                        }),
+                        24.height,
+                      ],
+                    ),
+                  ).center(),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // pop context
+                        const SBCustomerDashboard(
+                                runHomeApi: true,
+                                isfilter: false,
+                                isfirst: true)
+                            .launch(context, isNewTask: true);
+                      },
+                      child: Text(
+                        "Skip",
+                        style: primaryTextStyle(
+                            size: 16, color: black, weight: FontWeight.bold),
                       ),
-                    24.height,
-                    loginRegisterWidget(context,
-                        title: 'Already A Member',
-                        subTitle: 'Login', onTap: () {
-                      const SignInScreen(
-                        isfirst: false,
-                      ).launch(context, isNewTask: true);
-                    }),
-                    24.height,
-                  ],
-                ),
-              ).center(),
-              Align(
-                alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: () {
-                    // pop context
-                    const SBCustomerDashboard(
-                            runHomeApi: true, isfilter: false, isfirst: true)
-                        .launch(context, isNewTask: true);
-                  },
-                  child: Text(
-                    "Skip",
-                    style: primaryTextStyle(
-                        size: 16, color: black, weight: FontWeight.bold),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

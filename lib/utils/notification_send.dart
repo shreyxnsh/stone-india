@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -9,6 +10,12 @@ import 'package:stoneindia/utils/local_notifacation_service.dart';
 class NotificationSend {
   static bool notificationReceived = false;
   static void registerNotification() async {
+    bool notificationPermission =
+        await AwesomeNotifications().isNotificationAllowed();
+    if (!notificationPermission) {
+      return;
+    }
+
     late final FirebaseMessaging messaging;
     // await Firebase.initializeApp();
     messaging = FirebaseMessaging.instance;
@@ -17,10 +24,10 @@ class NotificationSend {
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       // check of debug mode
       bool isDebugMode = kDebugMode;
-      if (Platform.isIOS == true && isDebugMode) {
-        log("skip for ios");
-        return;
-      }
+      // if (Platform.isIOS == true && isDebugMode) {
+      //   log("skip for ios");
+      //   return;
+      // }
 
       String? token = await FirebaseMessaging.instance.getToken();
       print('token: $token');
