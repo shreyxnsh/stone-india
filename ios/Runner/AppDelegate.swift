@@ -15,14 +15,14 @@ import FirebaseAuth
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  override func application(
-    _ application: UIApplication,
-    open url: URL,
-    options: [UIApplication.OpenURLOptionsKey : Any] = [:]
-  ) -> Bool {
-    if Auth.auth().canHandle(url) {
-      return true
-    }
-    return super.application(application, open: url, options: options)
-  }
+  // override func application(
+  //   _ application: UIApplication,
+  //   open url: URL,
+  //   options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+  // ) -> Bool {
+  //   if Auth.auth().canHandle(url) {
+  //     return true
+  //   }
+  //   return super.application(application, open: url, options: options)
+  // }
 }
