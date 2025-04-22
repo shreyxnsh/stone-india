@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 
 class AppSettingItemWidget extends StatelessWidget {
   final String? name;
@@ -29,7 +30,9 @@ class AppSettingItemWidget extends StatelessWidget {
       onTap: widget == null
           ? onTap as void Function()?
           : () {
-              widget.launch(context);
+              if (widget != null) {
+                StoneNavigate.to(widget!);
+              }
             },
       child: Container(
         width: context.width() / 2 - 24,

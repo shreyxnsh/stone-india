@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
 import 'package:html/parser.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void setDynamicStatusBarColor({Color? color}) {
@@ -203,10 +204,8 @@ class AddFloatingButton extends StatelessWidget {
         icon ?? Icons.add,
         color: Colors.white,
       ),
-      onPressed: () => navigate == null
-          ? onTap!.call()
-          : navigate.launch(context,
-              pageRouteAnimation: PageRouteAnimation.Slide),
+      onPressed: () =>
+          navigate == null ? onTap!.call() : StoneNavigate.to(navigate!),
     );
   }
 }

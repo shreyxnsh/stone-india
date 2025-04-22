@@ -12,12 +12,8 @@ class _SBCustomerHomeScreenState extends State<SBCustomerHomeScreen> {
   Widget build(BuildContext context) {
     return const SingleChildScrollView(
       child: Column(
-        children: [
-
-        ],
+        children: [],
       ),
     );
   }
-
-
 }

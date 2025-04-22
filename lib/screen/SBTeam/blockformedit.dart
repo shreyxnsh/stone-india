@@ -7,6 +7,7 @@ import 'package:stoneindia/model/blockform.dart';
 import 'package:stoneindia/model/type.dart';
 import 'package:stoneindia/screen/SBTeam/adddatadialog.dart';
 import 'package:stoneindia/screen/SBTeam/editimageblockform.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 
 class EditBlockFormScreen extends StatefulWidget {
@@ -803,19 +804,32 @@ class _EditBlockFormScreenState extends State<EditBlockFormScreen> {
                 thicknessSelected == null) {
               toast("Empty Data");
             } else {
-              EditImageBlockFormScreen(
-                      block_id: widget.blockFormData!.id,
-                      block_name: blockSelected.toString(),
-                      product_name: productSelected.toString(),
-                      category_name: categorySelected.toString(),
-                      form_type: isEnquiry.toString(),
-                      slab_type_name: slabSelected.toString(),
-                      slab_height: swidth.text.toString(),
-                      slab_length: slength.text.toString(),
-                      slab_thickness: thicknessSelected.toString(),
-                      total_slabs: stotalslab.text.toString(),
-                      blockform_images: widget.blockFormData!.images)
-                  .launch(context);
+              // EditImageBlockFormScreen(
+
+              //         block_id: widget.blockFormData!.id,
+              //         block_name: blockSelected.toString(),
+              //         product_name: productSelected.toString(),
+              //         category_name: categorySelected.toString(),
+              //         form_type: isEnquiry.toString(),
+              //         slab_type_name: slabSelected.toString(),
+              //         slab_height: swidth.text.toString(),
+              //         slab_length: slength.text.toString(),
+              //         slab_thickness: thicknessSelected.toString(),
+              //         total_slabs: stotalslab.text.toString(),
+              //         blockform_images: widget.blockFormData!.images)
+              //     .launch(context);
+              StoneNavigate.to(EditImageBlockFormScreen(
+                  block_id: widget.blockFormData!.id,
+                  block_name: blockSelected.toString(),
+                  product_name: productSelected.toString(),
+                  category_name: categorySelected.toString(),
+                  form_type: isEnquiry.toString(),
+                  slab_type_name: slabSelected.toString(),
+                  slab_height: swidth.text.toString(),
+                  slab_length: slength.text.toString(),
+                  slab_thickness: thicknessSelected.toString(),
+                  total_slabs: stotalslab.text.toString(),
+                  blockform_images: widget.blockFormData!.images));
             }
           },
         ),

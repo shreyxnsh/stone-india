@@ -11,6 +11,7 @@ import 'package:stoneindia/screen/SBTeam/blockformedit.dart';
 import 'package:stoneindia/screen/SBTeam/blockformquickview.dart';
 import 'package:stoneindia/screen/quickviewimages.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/cachedimage.dart';
 import 'package:stoneindia/widget/cachedvideo.dart';
@@ -212,9 +213,11 @@ class _SoldScreenState extends State<SoldScreen> {
                               },
                               onTap: () {
                                 print("On Tap");
-                                QuickViewImagesWidget(
-                                        blockFormImages: soldlist[index].images)
-                                    .launch(context);
+                                // QuickViewImagesWidget(
+                                //         blockFormImages: soldlist[index].images)
+                                //     .launch(context);
+                                StoneNavigate.to(QuickViewImagesWidget(
+                                    blockFormImages: soldlist[index].images));
                               },
                               child: soldlist[index].images == null
                                   ? Container()
@@ -533,8 +536,10 @@ class _SoldScreenState extends State<SoldScreen> {
                                 fit: BoxFit.cover,
                                 color: white),
                           ).onTap(() {
-                            EditBlockFormScreen(blockFormData: soldlist[index])
-                                .launch(context);
+                            // EditBlockFormScreen(blockFormData: soldlist[index])
+                            //     .launch(context);
+                            StoneNavigate.to(EditBlockFormScreen(
+                                blockFormData: soldlist[index]));
                           }),
                           24.width,
                           Container(

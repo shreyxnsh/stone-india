@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
 import 'package:stoneindia/screen/signup.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 
 class WalkThroughModel {
   String? image;
@@ -138,7 +139,10 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                   ),
                 ).onTap(() {
                   setValue(IS_WALKTHROUGH_FIRST, true);
-                  const SignUpScreen().launch(context);
+                  // const SignUpScreen().launch(context);
+                  StoneNavigate.to(
+                    const SignUpScreen(),
+                  );
                 }),
                 secondChild: const SizedBox(),
                 duration: const Duration(milliseconds: 300),
@@ -188,7 +192,8 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
               ).onTap(
                 () {
                   setValue(IS_WALKTHROUGH_FIRST, true);
-                  const SignUpScreen().launch(context);
+                  // const SignUpScreen().launch(context);
+                  StoneNavigate.to(const SignUpScreen());
                 },
               ),
             ),

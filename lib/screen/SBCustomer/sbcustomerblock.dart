@@ -11,7 +11,9 @@ import 'package:stoneindia/model/blockform.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerblockformlist.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerdashboard.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerholdblock.dart';
+import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/nodatafound.dart';
 import 'package:translator/translator.dart';
@@ -203,6 +205,9 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
         //   isfirst: false,
         // ).launch(context,
         //     isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        StoneNavigate.toAndRemoveUntil(const SignInScreen(
+          isfirst: false,
+        ));
       }
     });
   }
@@ -412,9 +417,11 @@ class _SBCustomerBlockScreenState extends State<SBCustomerBlockScreen> {
             }
             setValue(BLOCK_FORM, jsonEncode(blockFormData));
             print("BLOCK_FORM FILTER REMOVE: ${getStringAsync(BLOCK_FORM)}");
-            const SBCustomerDashboard(
-                    runHomeApi: false, isfilter: false, isfirst: false)
-                .launch(context, isNewTask: true);
+            // const SBCustomerDashboard(
+            //         runHomeApi: false, isfilter: false, isfirst: false)
+            //     .launch(context, isNewTask: true);
+            StoneNavigate.toAndRemoveUntil(const SBCustomerDashboard(
+                runHomeApi: false, isfilter: false, isfirst: false));
           }
         }
       }

@@ -1,99 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Stone India - Granites</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Stone India - Granites</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>app-1-376613921123-ios-28c08244915915bc993356</string>
-			</array>
-		</dict>
-	</array>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<true/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
+		<key>BGTaskSchedulerPermittedIdentifiers</key>
+		<array>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		</array>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>$(DEVELOPMENT_LANGUAGE)</string>
+		<key>CFBundleDisplayName</key>
+		<string>Stone India - Granites</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>Stone India - Granites</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		
+		<string>$(FLUTTER_BUILD_NAME)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>app-1-376613921123-ios-e101212bf5e5fbf4993356</string>
+				</array>
+			</dict>
+		</array>
+		<key>CFBundleVersion</key>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<false/>
+		<key>LSRequiresIPhoneOS</key>
 		<true/>
+		<key>FlutterDeepLinkingEnabled</key>
+		<true/>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+			<key>NSAllowsArbitraryLoadsInWebContent</key>
+			<true/>
+		</dict>
+		<key>NSCameraUsageDescription</key>
+		<string>Stone India want to access your camera for profile photo</string>
+		<key>NSContactsUsageDescription</key>
+		<string>Stone India uses your contacts to simplify interactions, suggest relevant connections, and enable convenient communication features. With your consent, your contacts will be securely uploaded to our servers and processed in accordance with our Privacy Policy.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Stone India want to access your microphone</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Stone India want to access your gallery for profile photo</string>
+		<key>NSPrivacyAccessedAPITypes</key>
+		<array>
+			<string>NSPrivacyAccessedAPITypesNetworking</string>
+			<string>NSPrivacyAccessedAPITypesCalendar</string>
+			<string>NSPrivacyAccessedAPITypesContacts</string>
+			<string>NSPrivacyAccessedAPITypesPhotoLibrary</string>
+			<string>NSPrivacyAccessedAPITypesMicrophone</string>
+		</array>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>processing</string>
+			<string>remote-notification</string>
+		</array>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Stone India want to access your camera for profile photo</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Allow access to your contacts for enhanced service functionality, such as simplifying interactions and suggesting relevant connections.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Stone India want to access your microphone</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Stone India want to access your gallery for profile photo</string>
-	<key>NSPrivacyAccessedAPITypes</key>
-	<array>
-		<string>NSPrivacyAccessedAPITypesNetworking</string>
-		<string>NSPrivacyAccessedAPITypesCalendar</string>
-		<string>NSPrivacyAccessedAPITypesContacts</string>
-		<string>NSPrivacyAccessedAPITypesPhotoLibrary</string>
-		<string>NSPrivacyAccessedAPITypesMicrophone</string>
-	</array>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>We need access to your contacts to invite sellers and provide better services within the app. We do not track your activity across apps or websites.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>processing</string>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-</dict>
 </plist>

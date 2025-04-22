@@ -10,6 +10,7 @@ import 'package:stoneindia/screen/SBTeam/blockformlist.dart';
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/nodatafound.dart';
 
@@ -107,10 +108,13 @@ class _SBTeamBlockScreenState extends State<SBTeamBlockScreen> {
     accountDeleteStatus(getIntAsync(USER_ID)).then((value) {
       if (value["status"] == false) {
         setValue(IS_LOGGED_IN, false);
-        const SignInScreen(
+        // const SignInScreen(
+        //   isfirst: false,
+        // ).launch(context,
+        // isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        StoneNavigate.toAndRemoveUntil(const SignInScreen(
           isfirst: false,
-        ).launch(context,
-            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        ));
       }
     });
   }
@@ -388,8 +392,10 @@ class _SBTeamBlockScreenState extends State<SBTeamBlockScreen> {
             setValue(BLOCK_FORM_LIST, jsonEncode(blockFormData));
             print(
                 "BLOCK_FORM_LIST UPDATED REMOVE FILTER: ${getStringAsync(BLOCK_FORM_LIST)}");
-            const SBTeamDashboard(runHomeApi: false, isfilter: false)
-                .launch(context, isNewTask: true);
+            // const SBTeamDashboard(runHomeApi: false, isfilter: false)
+            //     .launch(context, isNewTask: true);
+            StoneNavigate.toAndRemoveUntil(
+                const SBTeamDashboard(runHomeApi: false, isfilter: false));
           }
         }
       }
@@ -819,7 +825,8 @@ class _SBTeamBlockScreenState extends State<SBTeamBlockScreen> {
       child: Scaffold(
         floatingActionButton: AddFloatingButton(
           onTap: () {
-            const AddBlockFormScreen().launch(context);
+            // const AddBlockFormScreen().launch(context);
+            StoneNavigate.to(const AddBlockFormScreen());
           },
         ),
         body: LiquidPullToRefresh(

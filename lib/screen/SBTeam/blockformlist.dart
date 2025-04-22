@@ -10,6 +10,7 @@ import 'package:stoneindia/screen/SBTeam/blockformedit.dart';
 import 'package:stoneindia/screen/SBTeam/blockformquickview.dart';
 import 'package:stoneindia/screen/quickviewimages.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/cachedimage.dart';
 import 'package:stoneindia/widget/cachedvideo.dart';
 import 'package:stoneindia/widget/commonrow.dart';
@@ -104,10 +105,13 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                 },
                                 onTap: () {
                                   print("On Tap");
-                                  QuickViewImagesWidget(
-                                          blockFormImages: widget
-                                              .blockFormData![index].images)
-                                      .launch(context);
+                                  // QuickViewImagesWidget(
+                                  //         blockFormImages: widget
+                                  //             .blockFormData![index].images)
+                                  //     .launch(context);
+                                  StoneNavigate.to(QuickViewImagesWidget(
+                                      blockFormImages:
+                                          widget.blockFormData![index].images));
                                 },
                                 child:
                                     widget.blockFormData![index].images == null
@@ -583,10 +587,13 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                       fit: BoxFit.cover,
                                       color: white),
                                 ).onTap(() {
-                                  EditBlockFormScreen(
-                                          blockFormData:
-                                              widget.blockFormData![index])
-                                      .launch(context);
+                                  // EditBlockFormScreen(
+                                  //         blockFormData:
+                                  //             widget.blockFormData![index])
+                                  //     .launch(context);
+                                  StoneNavigate.to(EditBlockFormScreen(
+                                      blockFormData:
+                                          widget.blockFormData![index]));
                                 }),
                               if (getStringAsync(USER_ROLE) ==
                                   UserRoleStoneBharatTeam)

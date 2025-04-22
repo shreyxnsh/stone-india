@@ -5,13 +5,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/firebase_options.dart';
 import 'package:stoneindia/screen/splash.dart';
 import 'package:stoneindia/utils/local_notifacation_service.dart';
 import 'package:stoneindia/utils/restapi.dart';
 import 'contants.dart';
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   if (message.notification != null) {
@@ -23,19 +23,19 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> appTracking() async {
-  final TrackingStatus status =
-      await AppTrackingTransparency.trackingAuthorizationStatus;
+// Future<void> appTracking() async {
+//   final TrackingStatus status =
+//       await AppTrackingTransparency.trackingAuthorizationStatus;
 
-  while (status == TrackingStatus.notDetermined) {
-    await Future.delayed(const Duration(seconds: 1));
-    final TrackingStatus newStatus =
-        await AppTrackingTransparency.requestTrackingAuthorization();
-    if (newStatus != TrackingStatus.notDetermined) {
-      break;
-    }
-  }
-}
+//   while (status == TrackingStatus.notDetermined) {
+//     await Future.delayed(const Duration(seconds: 1));
+//     final TrackingStatus newStatus =
+//         await AppTrackingTransparency.requestTrackingAuthorization();
+//     if (newStatus != TrackingStatus.notDetermined) {
+//       break;
+//     }
+//   }
+// }
 
 Future<void> tempLogin() async {
   if (getBoolAsync(IS_LOGGED_IN) == true) {
@@ -104,7 +104,7 @@ void main() async {
   await initialize();
   await initPlatformState();
   tempLogin();
-  appTracking();
+  // appTracking();
   runApp(const MyApp());
 }
 
@@ -130,7 +130,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       // navigatorObservers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

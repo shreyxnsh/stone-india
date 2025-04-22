@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
 import 'package:stoneindia/screen/editprofile.dart';
 import 'package:stoneindia/screen/signin.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/cataloguefilter.dart';
 
@@ -61,7 +62,8 @@ class TopNameWidget extends StatelessWidget {
                   !getBoolAsync(IS_LOGGED_IN)
                       ? GestureDetector(
                           onTap: () {
-                            const SignInScreen().launch(context);
+                            // const SignInScreen().launch(context);
+                            StoneNavigate.to(const SignInScreen());
                           },
                           child: Container(
                             height: 40,
@@ -136,7 +138,8 @@ class TopNameWidget extends StatelessWidget {
                                     width: 47,
                                     alignment: Alignment.center,
                                   ).cornerRadiusWithClipRRect(100).onTap(() {
-                                    const EditProfileScreen().launch(context);
+                                    // const EditProfileScreen().launch(context);
+                                    StoneNavigate.to(const EditProfileScreen());
                                   }),
                                 ),
                               ]),
@@ -214,7 +217,8 @@ class TopNameWidget extends StatelessWidget {
                                     .cornerRadiusWithClipRRect(defaultRadius)
                                     .onTap(
                                   () {
-                                    const EditProfileScreen().launch(context);
+                                    // const EditProfileScreen().launch(context);
+                                    StoneNavigate.to(const EditProfileScreen());
                                   },
                                 ),
                               ]),

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:pinput/pinput.dart';
 import 'dart:developer' as dev;
 import 'package:stoneindia/contants.dart';
@@ -24,12 +27,51 @@ class Otpscreen extends StatefulWidget {
 class _OtpscreenState extends State<Otpscreen> {
   bool isLoading = false;
   TextEditingController otpController = TextEditingController();
+  String? newVerificationId;
 
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  int seconds = 30;
 
   @override
   void initState() {
     super.initState();
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (seconds == 0) {
+        timer.cancel();
+      } else {
+        setState(() {
+          seconds--;
+        });
+      }
+    });
+  }
+
+  void resendOtp() {
+    FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: widget.mobile,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential).then(
+          (value) {
+            if (value.user != null) {
+              widget.onVerificationDone!();
+            }
+          },
+        );
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.message!),
+        ));
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        setState(() {
+          newVerificationId = verificationId;
+        });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
   }
 
   // // resend otp
@@ -46,6 +88,16 @@ class _OtpscreenState extends State<Otpscreen> {
   //     codeAutoRetrievalTimeout: (String verificationId) {},
   //   );
   // }
+
+  String resendOtpText() {
+    if (seconds == 0) {
+      return 'Resend OTP';
+    }
+    // progressive countdown
+    String minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    String secondsText = (seconds % 60).toString().padLeft(2, '0');
+    return 'Resend OTP in $minutes:$secondsText';
+  }
 
   Future<void> verifyOTP() async {
     if (otpController.text.isEmpty) {
@@ -67,7 +119,8 @@ class _OtpscreenState extends State<Otpscreen> {
 
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: widget.verificationId, smsCode: otpController.text);
+          verificationId: newVerificationId ?? widget.verificationId,
+          smsCode: otpController.text);
 
       await auth.signInWithCredential(credential).then(
         (value) {
@@ -185,6 +238,46 @@ class _OtpscreenState extends State<Otpscreen> {
                           ),
                         ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    // resendOTP();
+
+                    if (seconds != 0) {
+                      return;
+                    }
+                    resendOtp();
+                    // reset the timer
+                    setState(() {
+                      seconds = 30;
+                    });
+                    Timer.periodic(const Duration(seconds: 1), (timer) {
+                      if (seconds == 0) {
+                        timer.cancel();
+                      } else {
+                        setState(() {
+                          seconds--;
+                        });
+                      }
+                    });
+                  },
+                  child: Text(
+                    resendOtpText(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                      color: seconds != 0 ? textSecondaryColor : kPrimaryColor,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+                // resend otp button
               ],
             ),
           ),

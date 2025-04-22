@@ -3,10 +3,10 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
 import 'package:stoneindia/screen/SBTeam/blockformadd.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 
 class AddDataDailog extends StatefulWidget {
-
   const AddDataDailog({Key? key, this.datatype}) : super(key: key);
 
   final String? datatype;
@@ -35,9 +35,9 @@ class AddDataDailogState extends State<AddDataDailog> {
 
   fetchblockdata() async {
     await fetchblock().then((value) {
-      if(value.status == true){
-        if(value.blockData != null){
-          if(value.blockData!.isNotEmpty){
+      if (value.status == true) {
+        if (value.blockData != null) {
+          if (value.blockData!.isNotEmpty) {
             List<String> list = [];
             for (var element in value.blockData!) {
               list.add(element.block_name.toString());
@@ -54,9 +54,9 @@ class AddDataDailogState extends State<AddDataDailog> {
 
   fetchproductdata() async {
     await fetchproduct().then((value) {
-      if(value.status == true){
-        if(value.productData != null){
-          if(value.productData!.isNotEmpty){
+      if (value.status == true) {
+        if (value.productData != null) {
+          if (value.productData!.isNotEmpty) {
             List<String> list = [];
             for (var element in value.productData!) {
               list.add(element.product_name.toString());
@@ -73,9 +73,9 @@ class AddDataDailogState extends State<AddDataDailog> {
 
   fetchcategorydata() async {
     await fetchcategory().then((value) {
-      if(value.status == true){
-        if(value.categoryData != null){
-          if(value.categoryData!.isNotEmpty){
+      if (value.status == true) {
+        if (value.categoryData != null) {
+          if (value.categoryData!.isNotEmpty) {
             List<String> list = [];
             for (var element in value.categoryData!) {
               list.add(element.category_name.toString());
@@ -92,9 +92,9 @@ class AddDataDailogState extends State<AddDataDailog> {
 
   fetchslabdata() async {
     await fetchslab().then((value) {
-      if(value.status == true){
-        if(value.slabData != null){
-          if(value.slabData!.isNotEmpty){
+      if (value.status == true) {
+        if (value.slabData != null) {
+          if (value.slabData!.isNotEmpty) {
             List<String> list = [];
             for (var element in value.slabData!) {
               list.add(element.slab_name.toString());
@@ -111,9 +111,9 @@ class AddDataDailogState extends State<AddDataDailog> {
 
   fetchthicknessdata() async {
     await fetchthicknesslist().then((value) {
-      if(value.status == true){
-        if(value.thicknessData != null){
-          if(value.thicknessData!.isNotEmpty){
+      if (value.status == true) {
+        if (value.thicknessData != null) {
+          if (value.thicknessData!.isNotEmpty) {
             List<String> list = [];
             for (var element in value.thicknessData!) {
               list.add(element.thickness_name.toString());
@@ -131,24 +131,23 @@ class AddDataDailogState extends State<AddDataDailog> {
   Future<void> addData() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      if(widget.datatype == "block"){
+      if (widget.datatype == "block") {
         setState(() {
           isLoading = true;
         });
         hideKeyboard(context);
-        Map req = {
-          'name': nameCont.text
-        };
+        Map req = {'name': nameCont.text};
         addblock(req).then((value) async {
           toast(value["messages"].toString());
-          if(value["status"] == true){
+          if (value["status"] == true) {
             await fetchblockdata();
           }
           setState(() {
             isLoading = false;
           });
           finish(context);
-          const AddBlockFormScreen().launch(context);
+          // const AddBlockFormScreen().launch(context);
+          StoneNavigate.to(const AddBlockFormScreen());
         }).catchError((e) {
           toast(e.toString());
           setState(() {
@@ -156,17 +155,14 @@ class AddDataDailogState extends State<AddDataDailog> {
           });
           finish(context);
         });
-      }
-      else if(widget.datatype == "product"){
+      } else if (widget.datatype == "product") {
         setState(() {
           isLoading = true;
         });
         hideKeyboard(context);
-        Map req = {
-          'name': nameCont.text
-        };
+        Map req = {'name': nameCont.text};
         addproduct(req).then((value) async {
-          if(value["status"] == true){
+          if (value["status"] == true) {
             await fetchproductdata();
           }
           toast(value["messages"].toString());
@@ -174,7 +170,8 @@ class AddDataDailogState extends State<AddDataDailog> {
             isLoading = false;
           });
           finish(context);
-          const AddBlockFormScreen().launch(context);
+          // const AddBlockFormScreen().launch(context);
+          StoneNavigate.to(const AddBlockFormScreen());
         }).catchError((e) {
           toast(e.toString());
           setState(() {
@@ -182,17 +179,14 @@ class AddDataDailogState extends State<AddDataDailog> {
           });
           finish(context);
         });
-      }
-      else if(widget.datatype == "category"){
+      } else if (widget.datatype == "category") {
         setState(() {
           isLoading = true;
         });
         hideKeyboard(context);
-        Map req = {
-          'name': nameCont.text
-        };
+        Map req = {'name': nameCont.text};
         addcategory(req).then((value) async {
-          if(value["status"] == true){
+          if (value["status"] == true) {
             await fetchcategorydata();
           }
           toast(value["messages"].toString());
@@ -200,7 +194,8 @@ class AddDataDailogState extends State<AddDataDailog> {
             isLoading = false;
           });
           finish(context);
-          const AddBlockFormScreen().launch(context);
+          // const AddBlockFormScreen().launch(context);
+          StoneNavigate.to(const AddBlockFormScreen());
         }).catchError((e) {
           toast(e.toString());
           setState(() {
@@ -208,17 +203,14 @@ class AddDataDailogState extends State<AddDataDailog> {
           });
           finish(context);
         });
-      }
-      else if(widget.datatype == "slab"){
+      } else if (widget.datatype == "slab") {
         setState(() {
           isLoading = true;
         });
         hideKeyboard(context);
-        Map req = {
-          'name': nameCont.text
-        };
+        Map req = {'name': nameCont.text};
         addslab(req).then((value) async {
-          if(value["status"] == true){
+          if (value["status"] == true) {
             await fetchslabdata();
           }
           toast(value["messages"].toString());
@@ -226,7 +218,8 @@ class AddDataDailogState extends State<AddDataDailog> {
             isLoading = false;
           });
           finish(context);
-          const AddBlockFormScreen().launch(context);
+          // const AddBlockFormScreen().launch(context);
+          StoneNavigate.to(const AddBlockFormScreen());
         }).catchError((e) {
           toast(e.toString());
           setState(() {
@@ -234,17 +227,14 @@ class AddDataDailogState extends State<AddDataDailog> {
           });
           finish(context);
         });
-      }
-      else if(widget.datatype == "thickness"){
+      } else if (widget.datatype == "thickness") {
         setState(() {
           isLoading = true;
         });
         hideKeyboard(context);
-        Map req = {
-          'name': nameCont.text
-        };
+        Map req = {'name': nameCont.text};
         addthickness(req).then((value) async {
-          if(value["status"] == true){
+          if (value["status"] == true) {
             await fetchthicknessdata();
           }
           toast(value["messages"].toString());
@@ -252,7 +242,8 @@ class AddDataDailogState extends State<AddDataDailog> {
             isLoading = false;
           });
           finish(context);
-          const AddBlockFormScreen().launch(context);
+          // const AddBlockFormScreen().launch(context);
+          StoneNavigate.to(const AddBlockFormScreen());
         }).catchError((e) {
           toast(e.toString());
           setState(() {
@@ -260,8 +251,7 @@ class AddDataDailogState extends State<AddDataDailog> {
           });
           finish(context);
         });
-      }
-      else{}
+      } else {}
     }
   }
 
@@ -286,49 +276,51 @@ class AddDataDailogState extends State<AddDataDailog> {
                 decoration: textInputStyle(
                   context: context,
                   label: 'Enter Name',
-                  suffixIcon: commonImage(imageUrl: "assets/icons/edit.png", size: 18),
+                  suffixIcon:
+                      commonImage(imageUrl: "assets/icons/edit.png", size: 18),
                 ),
               ),
               16.height,
               Container(
                   child: (isLoading)
                       ? AppButton(
-                        width: context.width(),
-                        shapeBorder: RoundedRectangleBorder(borderRadius: radius()),
-                        onTap: () {
-                        },
-                        color: kPrimaryColor,
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Submit ', style: primaryTextStyle(color: Colors.white)),
-                            const SizedBox(
-                              height: 15,
-                              width: 15,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          ],
-                    ),
-                  )
+                          width: context.width(),
+                          shapeBorder:
+                              RoundedRectangleBorder(borderRadius: radius()),
+                          onTap: () {},
+                          color: kPrimaryColor,
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Submit ',
+                                  style: primaryTextStyle(color: Colors.white)),
+                              const SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
                       : AppButton(
-                        width: context.width(),
-                        shapeBorder: RoundedRectangleBorder(borderRadius: radius()),
-                        onTap: () async{
-                          await addData();
-                        },
-                        color: kPrimaryColor,
-                        padding: const EdgeInsets.all(16),
-                        child: Text("Submit ", style: boldTextStyle(color: textPrimaryWhiteColor)),
-                  )
-              ),
-
+                          width: context.width(),
+                          shapeBorder:
+                              RoundedRectangleBorder(borderRadius: radius()),
+                          onTap: () async {
+                            await addData();
+                          },
+                          color: kPrimaryColor,
+                          padding: const EdgeInsets.all(16),
+                          child: Text("Submit ",
+                              style:
+                                  boldTextStyle(color: textPrimaryWhiteColor)),
+                        )),
             ],
-          )
-      ),
+          )),
     );
   }
 }

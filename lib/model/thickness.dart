@@ -7,10 +7,13 @@ class ThicknessListModel {
 
   factory ThicknessListModel.fromJson(Map<String, dynamic> json) {
     return ThicknessListModel(
-        thicknessData: json['data'] != null ? (json['data'] as List).map((i) => ThicknessData.fromJson(i)).toList() : null,
+        thicknessData: json['data'] != null
+            ? (json['data'] as List)
+                .map((i) => ThicknessData.fromJson(i))
+                .toList()
+            : null,
         total: json['total'],
-        status: json['status']
-    );
+        status: json['status']);
   }
 
   Map<String, dynamic> toJson() {
@@ -32,10 +35,7 @@ class ThicknessData {
 
   factory ThicknessData.fromJson(Map<String, dynamic> json) {
     return ThicknessData(
-        thickness_id: json['id'],
-        thickness_name: json['name']
-
-    );
+        thickness_id: json['id'], thickness_name: json['name']);
   }
 
   Map<String, dynamic> toJson() {
@@ -44,5 +44,4 @@ class ThicknessData {
     data['name'] = thickness_name;
     return data;
   }
-
 }

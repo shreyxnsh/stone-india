@@ -13,6 +13,7 @@ import 'package:stoneindia/screen/otpscreen.dart';
 import 'package:stoneindia/screen/signup.dart';
 import 'package:stoneindia/utils/notification_send.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:translator/translator.dart';
 import 'SBCustomer/sbcustomerdashboard.dart';
@@ -34,6 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isLoading = false;
   String? country_code;
   String country_iso_code = 'IN';
+  bool isValidNumber = false;
   final translator = GoogleTranslator();
 
   @override
@@ -127,7 +129,6 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   saveForm() async {
-    print(number);
     if (number == null) {
       toast("Please enter valid number!");
       return;
@@ -171,11 +172,19 @@ class _SignInScreenState extends State<SignInScreen> {
           });
 
           // }
-          const SBCustomerDashboard(
-                  runHomeApi: true, isfilter: false, isfirst: true)
-              .launch(context,
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.Slide);
+          // const SBCustomerDashboard(
+          //         runHomeApi: true, isfilter: false, isfirst: true)
+          //     .launch(context,
+          //         isNewTask: true,
+          //         pageRouteAnimation: PageRouteAnimation.Slide);
+          // get.Get.(
+          //   const SBCustomerDashboard(
+          //       runHomeApi: true, isfilter: false, isfirst: true),
+          // );
+          StoneNavigate.toAndRemoveUntil(
+            const SBCustomerDashboard(
+                runHomeApi: true, isfilter: false, isfirst: true),
+          );
         } else if (value["status"] == true &&
             value["messages"] == "Login successfully!" &&
             value['role'] == "team") {
@@ -194,10 +203,13 @@ class _SignInScreenState extends State<SignInScreen> {
             isLoading = false;
           });
           toast('Login Successfully');
-          const SBTeamDashboard(runHomeApi: true, isfilter: false).launch(
-              context,
-              isNewTask: true,
-              pageRouteAnimation: PageRouteAnimation.Slide);
+          // const SBTeamDashboard(runHomeApi: true, isfilter: false).launch(
+          //     context,
+          //     isNewTask: true,
+          //     pageRouteAnimation: PageRouteAnimation.Slide);
+          StoneNavigate.toAndRemoveUntil(
+            const SBTeamDashboard(runHomeApi: true, isfilter: false),
+          );
         } else if (value["status"] == false) {
           toast(value["messages"].toString());
           setState(() {
@@ -299,6 +311,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               number = phone.completeNumber;
                               country_code = phone.countryCode;
                               country_iso_code = phone.countryISOCode;
+                              isValidNumber = phone.isValidNumber();
                             });
                           },
                         ),
@@ -309,74 +322,105 @@ class _SignInScreenState extends State<SignInScreen> {
                         shapeBorder: RoundedRectangleBorder(
                           borderRadius: radius(),
                         ),
-                        onTap: () async {
-                          if (number == null) {
-                            toast("Please enter valid number!");
-                            return;
-                          }
-                          if (isLoading == true) {
-                            return;
-                          }
+                        onTap: isLoading == true
+                            ? null
+                            : () async {
+                                FirebaseAuth auth = FirebaseAuth.instance;
+                                // ConfirmationResult confirmationResult =
+                                //     await auth
+                                //         .signInWithPhoneNumber('+918077963037');
+                                // return;
 
-                          setState(() {
-                            isLoading = true;
-                          });
+                                if (number == null) {
+                                  toast("Please enter valid number!");
+                                  return;
+                                }
+                                if (isValidNumber == false) {
+                                  toast("Please enter valid number!");
+                                  return;
+                                }
 
-                          FirebaseAuth auth = FirebaseAuth.instance;
-                          // await auth
-                          //     .setSettings(
-                          //         appVerificationDisabledForTesting: true)
-                          //     .catchError((e) {
-                          //   toast("An error ocured : $e");
-                          //   setState(() {
-                          //     isLoading = false;
-                          //   });
-                          // });
-                          await auth
-                              .verifyPhoneNumber(
-                            phoneNumber: number!,
-                            verificationCompleted:
-                                (PhoneAuthCredential credential) async {
-                              await auth.signInWithCredential(credential);
-                              print("Automatic Verification Done");
-                            },
-                            verificationFailed: (FirebaseAuthException e) {
-                              print("Verification Failed: ${e.message}");
-                            },
-                            codeSent:
-                                (String verificationId, int? resendToken) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Otpscreen(
-                                    mobile: number!,
-                                    verificationId: verificationId,
-                                    onVerificationDone: () async {
-                                      await saveForm();
-                                    },
-                                  ),
-                                ),
-                              );
-                              print("OTP Sent");
-                            },
-                            codeAutoRetrievalTimeout: (String verificationId) {
-                              print("Timeout");
-                            },
-                            //
-                          )
-                              .catchError((e) {
-                            toast("An error ocured : $e");
-                            setState(() {
-                              isLoading = false;
-                            });
-                          });
-                          setState(() {
-                            isLoading = false;
-                          });
+                                setState(() {
+                                  isLoading = true;
+                                });
 
-                          // saveForm();
-                        },
+                                Map req = {
+                                  'whatsapp_number':
+                                      number.toString().replaceAll("+", ""),
+                                  'fcm_token':
+                                      getStringAsync(FCM_TOKEN).toString(),
+                                  'country_code': country_code
+                                      .validate()
+                                      .replaceAll("+", ""),
+                                  'country_iso_code':
+                                      country_iso_code.validate(),
+                                };
+
+                                dev.log(req.toString(), name: "Login Request");
+                                await login(req).then((value) async {
+                                  if (value["status"] == false) {
+                                    toast(
+                                        "Can't login with this number!, maybe you are not registered yet.");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                });
+
+                                if (isLoading == false) {
+                                  return;
+                                }
+
+                                // FirebaseAuth auth = FirebaseAuth.instance;
+                                await auth
+                                    .verifyPhoneNumber(
+                                  phoneNumber: number!,
+
+                                  verificationCompleted:
+                                      (PhoneAuthCredential credential) async {
+                                    await auth.signInWithCredential(credential);
+                                    print("Automatic Verification Done");
+                                  },
+                                  verificationFailed:
+                                      (FirebaseAuthException e) {
+                                    print("Verification Failed: ${e.message}");
+                                  },
+                                  codeSent: (String verificationId,
+                                      int? resendToken) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Otpscreen(
+                                          mobile: number!,
+                                          verificationId: verificationId,
+                                          onVerificationDone: () async {
+                                            await saveForm();
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                    print("OTP Sent");
+                                  },
+                                  codeAutoRetrievalTimeout:
+                                      (String verificationId) {
+                                    print("Timeout");
+                                  },
+                                  //
+                                )
+                                    .catchError((e) {
+                                  toast("An error ocured : $e");
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                });
+                                setState(() {
+                                  isLoading = false;
+                                });
+
+                                // saveForm();
+                              },
                         color: kPrimaryColor,
+                        disabledColor: kPrimaryColor.withAlpha(200),
                         padding: const EdgeInsets.all(16),
                         child: SizedBox(
                           height: 24,
@@ -396,7 +440,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         title: "New Member",
                         subTitle: "Sign Up",
                         onTap: () {
-                          const SignUpScreen().launch(context);
+                          // const SignUpScreen().launch(context);
+
+                          StoneNavigate.toAndRemoveUntil(
+                            const SignUpScreen(),
+                          );
                         },
                       ),
                     ],
@@ -407,8 +455,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: TextButton(
                     onPressed: () {
                       // pop context
-                      const SBCustomerDashboard()
-                          .launch(context, isNewTask: true);
+                      // const SBCustomerDashboard()
+                      //     .launch(context, isNewTask: true);
+
+                      StoneNavigate.toAndRemoveUntil(
+                        const SBCustomerDashboard(),
+                      );
                     },
                     child: Text(
                       "Skip",

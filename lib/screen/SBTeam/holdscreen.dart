@@ -12,6 +12,7 @@ import 'package:stoneindia/screen/SBTeam/blockformedit.dart';
 import 'package:stoneindia/screen/SBTeam/blockformquickview.dart';
 import 'package:stoneindia/screen/quickviewimages.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/cachedimage.dart';
 import 'package:stoneindia/widget/cachedvideo.dart';
@@ -215,9 +216,8 @@ class _HoldScreenState extends State<HoldScreen> {
                               },
                               onTap: () {
                                 print("On Tap");
-                                QuickViewImagesWidget(
-                                        blockFormImages: holdlist[index].images)
-                                    .launch(context);
+                                StoneNavigate.to(QuickViewImagesWidget(
+                                    blockFormImages: holdlist[index].images));
                               },
                               child: holdlist[index].images == null
                                   ? Container()
@@ -611,8 +611,10 @@ class _HoldScreenState extends State<HoldScreen> {
                                 fit: BoxFit.cover,
                                 color: white),
                           ).onTap(() {
-                            EditBlockFormScreen(blockFormData: holdlist[index])
-                                .launch(context);
+                            // EditBlockFormScreen(blockFormData: holdlist[index])
+                            //     .launch(context);
+                            StoneNavigate.to(EditBlockFormScreen(
+                                blockFormData: holdlist[index]));
                           }),
                           24.width,
                           Container(

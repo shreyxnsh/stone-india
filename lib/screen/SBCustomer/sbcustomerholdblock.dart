@@ -9,6 +9,7 @@ import 'package:stoneindia/model/blockform.dart';
 import 'package:stoneindia/screen/SBTeam/blockformquickview.dart';
 import 'package:stoneindia/screen/quickviewimages.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/cachedimage.dart';
 import 'package:stoneindia/widget/cachedvideo.dart';
 import 'package:stoneindia/widget/commonrow.dart';
@@ -186,9 +187,11 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
                           },
                           onTap: () {
                             print("On Tap");
-                            QuickViewImagesWidget(
-                                    blockFormImages: holdlist[index].images)
-                                .launch(context);
+                            // QuickViewImagesWidget(
+                            //         blockFormImages: holdlist[index].images)
+                            //     .launch(context);
+                            StoneNavigate.to(QuickViewImagesWidget(
+                                blockFormImages: holdlist[index].images));
                           },
                           child: holdlist[index].images == null
                               ? Container()

@@ -10,6 +10,7 @@ import 'package:stoneindia/model/type.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerdashboard.dart';
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:intl/intl.dart';
 
@@ -119,24 +120,36 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
             }
             setValue(BLOCK_FORM, jsonEncode(blockFormData));
             print("BLOCK_FORM Filter: ${getStringAsync(BLOCK_FORM)}");
-            SBCustomerDashboard(
-                    runHomeApi: false,
-                    isfilter: true,
-                    isfirst: false,
-                    typeSelected: typeSelected,
-                    productSelected: productSelected,
-                    blockSelected: blockSelected,
-                    categorySelected: categorySelected,
-                    slabSelected: slabSelected,
-                    thicknessSelected: thicknessSelected)
-                .launch(context, isNewTask: true);
+            // SBCustomerDashboard(
+            //         runHomeApi: false,
+            //         isfilter: true,
+            //         isfirst: false,
+            //         typeSelected: typeSelected,
+            //         productSelected: productSelected,
+            //         blockSelected: blockSelected,
+            //         categorySelected: categorySelected,
+            //         slabSelected: slabSelected,
+            //         thicknessSelected: thicknessSelected)
+            //     .launch(context, isNewTask: true);
+            StoneNavigate.toAndRemoveUntil(SBCustomerDashboard(
+                runHomeApi: false,
+                isfilter: true,
+                isfirst: false,
+                typeSelected: typeSelected,
+                productSelected: productSelected,
+                blockSelected: blockSelected,
+                categorySelected: categorySelected,
+                slabSelected: slabSelected,
+                thicknessSelected: thicknessSelected));
           }
         }
       } else if (value.status == false) {
         errorToast(value.message.toString());
-        const SBCustomerDashboard(
-                runHomeApi: false, isfilter: false, isfirst: false)
-            .launch(context, isNewTask: true);
+        // const SBCustomerDashboard(
+        //         runHomeApi: false, isfilter: false, isfirst: false)
+        //     .launch(context, isNewTask: true);
+        StoneNavigate.toAndRemoveUntil(const SBCustomerDashboard(
+            runHomeApi: false, isfilter: false, isfirst: false));
       }
     }).catchError((e) {
       errorToast(e.toString());
@@ -185,23 +198,35 @@ class CatalogueFilterDailogState extends State<CatalogueFilterDailog> {
             setValue(BLOCK_FORM_LIST, jsonEncode(blockFormData));
             print("BLOCK_FORM_LIST Filter: ${getStringAsync(BLOCK_FORM_LIST)}");
             print(typeSelected);
-            SBTeamDashboard(
-                    runHomeApi: false,
-                    isfilter: true,
-                    typeSelected: typeSelected,
-                    productSelected: productSelected,
-                    blockSelected: blockSelected,
-                    categorySelected: categorySelected,
-                    slabSelected: slabSelected,
-                    thicknessSelected: thicknessSelected,
-                    date: filterDateCont.text)
-                .launch(context, isNewTask: true);
+            // SBTeamDashboard(
+            //         runHomeApi: false,
+            //         isfilter: true,
+            //         typeSelected: typeSelected,
+            //         productSelected: productSelected,
+            //         blockSelected: blockSelected,
+            //         categorySelected: categorySelected,
+            //         slabSelected: slabSelected,
+            //         thicknessSelected: thicknessSelected,
+            //         date: filterDateCont.text)
+            //     .launch(context, isNewTask: true);
+            StoneNavigate.toAndRemoveUntil(SBTeamDashboard(
+                runHomeApi: false,
+                isfilter: true,
+                typeSelected: typeSelected,
+                productSelected: productSelected,
+                blockSelected: blockSelected,
+                categorySelected: categorySelected,
+                slabSelected: slabSelected,
+                thicknessSelected: thicknessSelected,
+                date: filterDateCont.text));
           }
         }
       } else if (value.status == false) {
         errorToast(value.message.toString());
-        const SBTeamDashboard(runHomeApi: false, isfilter: false)
-            .launch(context, isNewTask: true);
+        // const SBTeamDashboard(runHomeApi: false, isfilter: false)
+        //     .launch(context, isNewTask: true);
+        StoneNavigate.toAndRemoveUntil(
+            const SBTeamDashboard(runHomeApi: false, isfilter: false));
       }
     }).catchError((e) {
       errorToast(e.toString());

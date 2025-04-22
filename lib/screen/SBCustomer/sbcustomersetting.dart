@@ -9,6 +9,7 @@ import 'package:stoneindia/screen/editprofile.dart';
 import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/screen/terms_and_condition.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/appsetting.dart';
 import 'dart:io' show Platform;
@@ -75,7 +76,8 @@ class _SBCustomerSettingScreenState extends State<SBCustomerSettingScreen> {
                                 height: 20, width: 20, color: Colors.white),
                           ).onTap(
                             () {
-                              const EditProfileScreen().launch(context);
+                              // const EditProfileScreen().launch(context);
+                              StoneNavigate.to(const EditProfileScreen());
                             },
                           ),
                         ),

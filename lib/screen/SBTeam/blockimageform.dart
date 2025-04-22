@@ -10,6 +10,7 @@ import 'package:stoneindia/contants.dart';
 import 'package:stoneindia/model/blockform.dart';
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/addfilterdialog.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:stoneindia/widget/cachedimage.dart';
@@ -258,8 +259,10 @@ class _UploadImageBlockFormScreenState extends State<UploadImageBlockFormScreen>
             }
             setValue(BLOCK_FORM_LIST, jsonEncode(blockFormData));
             print("BLOCK_FORM_LIST Update: ${getStringAsync(BLOCK_FORM_LIST)}");
-            const SBTeamDashboard(runHomeApi: false, isfilter: false)
-                .launch(context, isNewTask: true);
+            // const SBTeamDashboard(runHomeApi: false, isfilter: false)
+            //     .launch(context, isNewTask: true);
+            StoneNavigate.to(
+                const SBTeamDashboard(runHomeApi: false, isfilter: false));
           }
         }
       } else {

@@ -6,6 +6,7 @@ import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/screen/signup.dart';
 import 'package:stoneindia/screen/walkthrough.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -32,11 +33,22 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 2));
     if (getBoolAsync(IS_WALKTHROUGH_FIRST, defaultValue: false)) {
       // SignInScreen(isfirst: true).launch(context, isNewTask: true);
-      const SBCustomerDashboard(
-              runHomeApi: true, isfilter: false, isfirst: true)
-          .launch(context);
+      // const SBCustomerDashboard(
+      //         runHomeApi: true, isfilter: false, isfirst: true)
+      //     .launch(context);
+
+      StoneNavigate.to(
+        const SBCustomerDashboard(
+          runHomeApi: true,
+          isfilter: false,
+          isfirst: true,
+        ),
+      );
     } else {
-      const WalkThroughScreen().launch(context, isNewTask: true);
+      // const WalkThroughScreen().launch(context, isNewTask: true);
+      StoneNavigate.toAndRemoveUntil(
+        const WalkThroughScreen(),
+      );
     }
   }
 

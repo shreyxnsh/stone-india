@@ -17,6 +17,7 @@ import 'package:stoneindia/screen/otpscreen.dart';
 import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/utils/notification_send.dart';
 import 'package:stoneindia/utils/restapi.dart';
+import 'package:stoneindia/utils/s_navigate.dart';
 import 'package:stoneindia/widget/appcommon.dart';
 import 'package:translator/translator.dart';
 
@@ -39,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   bool? rememberMe = false;
   String? number;
+  bool isValidNumber = false;
 
   String? country_code;
   String? country_iso_code = 'IN';
@@ -185,11 +187,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               });
 
               // }
-              const SBCustomerDashboard(
-                      runHomeApi: true, isfilter: false, isfirst: true)
-                  .launch(context,
-                      isNewTask: true,
-                      pageRouteAnimation: PageRouteAnimation.Slide);
+              // const SBCustomerDashboard(
+              //         runHomeApi: true, isfilter: false, isfirst: true)
+              //     .launch(context,
+              //         isNewTask: true,
+              //         pageRouteAnimation: PageRouteAnimation.Slide);
+
+              StoneNavigate.toAndRemoveUntil(const SBCustomerDashboard(
+                  runHomeApi: true, isfilter: false, isfirst: true));
             } else if (value["status"] == true &&
                 value["messages"] == "Login successfully!" &&
                 value['role'] == "team") {
@@ -208,10 +213,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isLoading = false;
               });
               toast('Login Successfully');
-              const SBTeamDashboard(runHomeApi: true, isfilter: false).launch(
-                  context,
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.Slide);
+              // const SBTeamDashboard(runHomeApi: true, isfilter: false).launch(
+              //     context,
+              //     isNewTask: true,
+              //     pageRouteAnimation: PageRouteAnimation.Slide);
+
+              StoneNavigate.toAndRemoveUntil(
+                const SBTeamDashboard(
+                  runHomeApi: true,
+                  isfilter: false,
+                ),
+              );
             } else if (value["status"] == false) {
               toast(value["messages"].toString());
               setState(() {
@@ -372,131 +384,153 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 number = phone.completeNumber;
                                 country_code = phone.countryCode;
                                 country_iso_code = phone.countryISOCode;
+                                isValidNumber = phone.isValidNumber();
                               });
                             },
                           ),
                         ),
                         40.height,
-                        if (isLoading == true)
-                          AppButton(
-                              width: context.width(),
-                              shapeBorder: RoundedRectangleBorder(
-                                  borderRadius: radius()),
-                              onTap: () {
-                                toast("Please wait! Loading..");
-                              },
-                              color: kPrimaryColor,
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Submit",
-                                      style: boldTextStyle(
-                                          color: textPrimaryWhiteColor)),
-                                  10.width,
-                                  const SizedBox(
-                                    height: 15,
-                                    width: 15,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                ],
-                              )),
-                        if (isLoading == false)
-                          AppButton(
-                            width: context.width(),
-                            shapeBorder:
-                                RoundedRectangleBorder(borderRadius: radius()),
-                            onTap: () async {
-                              if (number == null) {
-                                toast("Please enter valid details!");
-                                return;
-                              }
-                              if (firstNameCont.text.isEmpty ||
-                                  lastNameCont.text.isEmpty ||
-                                  number!.isEmpty) {
-                                toast("Please enter valid details!");
-                                return;
-                              }
-                              log("I am here, Phone number ${number!}");
-                              Map req = {
-                                'whatsapp_number':
-                                    number.toString().replaceAll("+", ""),
-                                'fcm_token':
-                                    getStringAsync(FCM_TOKEN).toString(),
-                                'country_code':
-                                    country_code.validate().replaceAll("+", ""),
-                                'country_iso_code': country_iso_code.validate(),
-                              };
-                              bool isUserExists = false;
-                              await login(req).then((value) async {
-                                if (value["status"] == true &&
-                                    value["messages"] ==
-                                        "Login successfully!" &&
-                                    value['role'] == "customer") {
-                                  isUserExists = true;
-                                  toastLong('User already exists');
-                                }
-                              }).catchError((e) {});
-                              if (isUserExists) {
-                                dev.log("User already exists");
-                                return;
-                              }
-
-                              FirebaseAuth auth = FirebaseAuth.instance;
-                              // await auth.setSettings(
-                              //     appVerificationDisabledForTesting: true);
-                              await auth.verifyPhoneNumber(
-                                phoneNumber: number!,
-                                verificationCompleted:
-                                    (PhoneAuthCredential credential) async {
-                                  await auth.signInWithCredential(credential);
-                                  print("Automatic Verification Done");
-                                },
-                                verificationFailed: (FirebaseAuthException e) {
-                                  print("Verification Failed: ${e.message}");
-                                },
-                                codeSent:
-                                    (String verificationId, int? resendToken) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Otpscreen(
-                                        mobile: number!,
-                                        verificationId: verificationId,
-                                        onVerificationDone: () async {
-                                          await signUp();
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                  print("OTP Sent");
-                                },
-                                codeAutoRetrievalTimeout:
-                                    (String verificationId) {
-                                  print("Timeout");
-                                },
-                                //
-                              );
-
-                              // await signUp();
-                            },
-                            color: kPrimaryColor,
-                            padding: const EdgeInsets.all(16),
-                            child: Text('Submit',
-                                style: boldTextStyle(
-                                    color: textPrimaryWhiteColor)),
+                        AppButton(
+                          width: context.width(),
+                          shapeBorder: RoundedRectangleBorder(
+                            borderRadius: radius(),
                           ),
+                          onTap: isLoading == true
+                              ? null
+                              : () async {
+                                  if (number == null) {
+                                    toast("Please enter valid details!");
+                                    return;
+                                  }
+                                  if (number!.length < 10) {
+                                    toast("Please enter valid number!");
+                                    return;
+                                  }
+                                  if (firstNameCont.text.isEmpty ||
+                                      lastNameCont.text.isEmpty ||
+                                      number!.isEmpty) {
+                                    toast("Please enter valid details!");
+                                    return;
+                                  }
+                                  if (isLoading == true) {
+                                    return;
+                                  }
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  // snackBar(
+                                  //   context,
+                                  //   title: "Logging in, please wait...",
+                                  //   snackBarAction: SnackBarAction(
+                                  //     label: 'Ok',
+                                  //     onPressed: () {
+                                  //       // dismiss
+                                  //       ScaffoldMessenger.of(context)
+                                  //           .hideCurrentSnackBar();
+                                  //     },
+                                  //   ),
+                                  // );
+                                  log("I am here, Phone number ${number!}");
+                                  Map req = {
+                                    'whatsapp_number':
+                                        number.toString().replaceAll("+", ""),
+                                    'fcm_token':
+                                        getStringAsync(FCM_TOKEN).toString(),
+                                    'country_code': country_code
+                                        .validate()
+                                        .replaceAll("+", ""),
+                                    'country_iso_code':
+                                        country_iso_code.validate(),
+                                  };
+                                  bool isUserExists = false;
+                                  await login(req).then((value) async {
+                                    if (value["status"] == true &&
+                                        value["messages"] ==
+                                            "Login successfully!" &&
+                                        value['role'] == "customer") {
+                                      isUserExists = true;
+                                      toastLong('User already exists');
+                                    }
+                                  }).catchError((e) {});
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  if (isUserExists) {
+                                    toast("User already exists");
+
+                                    return;
+                                  }
+
+                                  FirebaseAuth auth = FirebaseAuth.instance;
+                                  // await auth.setSettings(
+                                  //     appVerificationDisabledForTesting: true);
+                                  await auth.verifyPhoneNumber(
+                                    phoneNumber: number!,
+                                    verificationCompleted:
+                                        (PhoneAuthCredential credential) async {
+                                      await auth
+                                          .signInWithCredential(credential);
+                                      print("Automatic Verification Done");
+                                    },
+                                    verificationFailed:
+                                        (FirebaseAuthException e) {
+                                      print(
+                                          "Verification Failed: ${e.message}");
+                                    },
+                                    codeSent: (String verificationId,
+                                        int? resendToken) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Otpscreen(
+                                            mobile: number!,
+                                            verificationId: verificationId,
+                                            onVerificationDone: () async {
+                                              await signUp();
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                      print("OTP Sent");
+                                    },
+                                    codeAutoRetrievalTimeout:
+                                        (String verificationId) {
+                                      print("Timeout");
+                                    },
+                                    //
+                                  );
+
+                                  // await signUp();
+                                },
+                          color: kPrimaryColor,
+                          disabledColor: kPrimaryColor.withAlpha(200),
+                          padding: const EdgeInsets.all(16),
+                          child: SizedBox(
+                            height: 24,
+                            width: isLoading ? 24 : null,
+                            child: isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text("Sign Up",
+                                    style: boldTextStyle(
+                                        color: textPrimaryWhiteColor)),
+                          ),
+                        ),
                         24.height,
                         loginRegisterWidget(context,
                             title: 'Already A Member',
                             subTitle: 'Login', onTap: () {
-                          const SignInScreen(
-                            isfirst: false,
-                          ).launch(context, isNewTask: true);
+                          // const SignInScreen(
+                          //   isfirst: false,
+                          // ).launch(context, isNewTask: true);
+
+                          StoneNavigate.toAndRemoveUntil(
+                            const SignInScreen(
+                              isfirst: false,
+                            ),
+                          );
                         }),
                         24.height,
                       ],
@@ -507,11 +541,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: TextButton(
                       onPressed: () {
                         // pop context
-                        const SBCustomerDashboard(
-                                runHomeApi: true,
-                                isfilter: false,
-                                isfirst: true)
-                            .launch(context, isNewTask: true);
+                        // const SBCustomerDashboard(
+                        //         runHomeApi: true,
+                        //         isfilter: false,
+                        //         isfirst: true)
+                        //     .launch(context, isNewTask: true);
+
+                        StoneNavigate.toAndRemoveUntil(
+                          const SBCustomerDashboard(
+                            runHomeApi: true,
+                            isfilter: false,
+                            isfirst: true,
+                          ),
+                        );
                       },
                       child: Text(
                         "Skip",
