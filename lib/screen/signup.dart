@@ -11,6 +11,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stoneindia/contants.dart';
+import 'package:stoneindia/main.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerdashboard.dart';
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/screen/otpscreen.dart';
@@ -40,6 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   bool? rememberMe = false;
   String? number;
+  bool isLoginFirst = flowStats['login-first'] ?? false;
   bool isValidNumber = false;
 
   String? country_code;
@@ -56,6 +58,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .toString();
     return translatedText;
     return translatedText;
+  }
+
+  Future<void> getLoginFirst() async {
+    Map<String, dynamic> responseData = await authPermissionAPI();
+    if (responseData['isSuccess'] == true) {
+      isLoginFirst = responseData['login-first'];
+      log("isLoginFirst: $isLoginFirst");
+    }
+    setState(() {});
   }
 
   Future _fetchContacts() async {
@@ -267,6 +278,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
     NotificationSend.registerNotification();
+    getLoginFirst();
     init();
   }
 
@@ -418,6 +430,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
+
+                                  bool authPermissionGranted = false;
+
+                                  Map<String, dynamic> authPermissionResult =
+                                      await authPermissionAPI();
+
+                                  if (authPermissionResult['isSuccess'] ==
+                                      true) {
+                                    if (!authPermissionResult['phone-auth']) {
+                                      signUp();
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      return;
+                                    }
+                                  }
+
                                   // snackBar(
                                   //   context,
                                   //   title: "Logging in, please wait...",
@@ -430,7 +459,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   //     },
                                   //   ),
                                   // );
-                                  log("I am here, Phone number ${number!}");
+
                                   Map req = {
                                     'whatsapp_number':
                                         number.toString().replaceAll("+", ""),
@@ -453,11 +482,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     }
                                   }).catchError((e) {});
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
                                   if (isUserExists) {
-                                    toast("User already exists");
+                                    // toast("User already exists");
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content:
+                                          const Text("User already exists"),
+                                      action: SnackBarAction(
+                                        label: 'OK',
+                                        onPressed: () {},
+                                      ),
+                                    ));
 
                                     return;
                                   }
@@ -475,6 +510,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     },
                                     verificationFailed:
                                         (FirebaseAuthException e) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
                                       print(
                                           "Verification Failed: ${e.message}");
                                     },
@@ -493,13 +531,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         ),
                                       );
                                       print("OTP Sent");
+                                      setState(() {
+                                        isLoading = false;
+                                      });
                                     },
                                     codeAutoRetrievalTimeout:
                                         (String verificationId) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
                                       print("Timeout");
                                     },
                                     //
                                   );
+                                  //  setState(() {
+                                  //   isLoading = false;
+                                  // });
 
                                   // await signUp();
                                 },
@@ -536,29 +583,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ],
                     ),
                   ).center(),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: TextButton(
-                      onPressed: () {
-                        // pop context
-                        // const SBCustomerDashboard(
-                        //         runHomeApi: true,
-                        //         isfilter: false,
-                        //         isfirst: true)
-                        //     .launch(context, isNewTask: true);
+                  Visibility(
+                    visible: !isLoginFirst,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton(
+                        onPressed: () {
+                          // pop context
+                          // const SBCustomerDashboard(
+                          //         runHomeApi: true,
+                          //         isfilter: false,
+                          //         isfirst: true)
+                          //     .launch(context, isNewTask: true);
 
-                        StoneNavigate.toAndRemoveUntil(
-                          const SBCustomerDashboard(
-                            runHomeApi: true,
-                            isfilter: false,
-                            isfirst: true,
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Skip",
-                        style: primaryTextStyle(
-                            size: 16, color: black, weight: FontWeight.bold),
+                          StoneNavigate.toAndRemoveUntil(
+                            const SBCustomerDashboard(
+                              runHomeApi: true,
+                              isfilter: false,
+                              isfirst: true,
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Skip",
+                          style: primaryTextStyle(
+                              size: 16, color: black, weight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

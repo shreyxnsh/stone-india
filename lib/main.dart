@@ -1,11 +1,16 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/firebase_options.dart';
 import 'package:stoneindia/screen/splash.dart';
@@ -22,6 +27,8 @@ Future<void> backgroundHandler(RemoteMessage message) async {
     LocalNotificationService.createanddisplaynotification(message);
   }
 }
+
+Map<String, dynamic> flowStats = {};
 
 // Future<void> appTracking() async {
 //   final TrackingStatus status =
@@ -93,8 +100,17 @@ Future<void> tempLogin() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   log(FirebaseAuth.instance.currentUser.toString());
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   // lock to portrait
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -104,6 +120,7 @@ void main() async {
   await initialize();
   await initPlatformState();
   tempLogin();
+  flowStats = await authPermissionAPI();
   // appTracking();
   runApp(const MyApp());
 }

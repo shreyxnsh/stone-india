@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
+import 'package:stoneindia/main.dart';
 import 'package:stoneindia/screen/SBCustomer/sbcustomerdashboard.dart';
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/screen/signin.dart';
 import 'package:stoneindia/screen/signup.dart';
 import 'package:stoneindia/screen/walkthrough.dart';
+import 'package:stoneindia/utils/restapi.dart';
 import 'package:stoneindia/utils/s_navigate.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -36,6 +38,15 @@ class _SplashScreenState extends State<SplashScreen> {
       // const SBCustomerDashboard(
       //         runHomeApi: true, isfilter: false, isfirst: true)
       //     .launch(context);
+
+      if (flowStats['login-first'] == true) {
+        StoneNavigate.to(
+          const SignInScreen(
+            isfirst: true,
+          ),
+        );
+        return;
+      }
 
       StoneNavigate.to(
         const SBCustomerDashboard(

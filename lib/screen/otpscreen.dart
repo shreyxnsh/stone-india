@@ -210,8 +210,8 @@ class _OtpscreenState extends State<Otpscreen> {
                   //   borderRadius: radius(),
                   // ),
 
-                  onPressed: () {
-                    verifyOTP();
+                  onPressed: () async {
+                    await verifyOTP();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: kPrimaryColor,

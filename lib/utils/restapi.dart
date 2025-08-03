@@ -23,6 +23,30 @@ Future login(Map request) async {
       request: request, method: HttpMethod.POST)));
 }
 
+Future<Map<String, dynamic>> authPermissionAPI() async {
+  var request = http.Request(
+      'GET',
+      Uri.parse(
+          'https://getphoneauth-2tuyzi5ymq-uc.a.run.app?authkey=7a21bfed_9be14185ae297b_74f2eb5a84'));
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> data =
+        jsonDecode(await response.stream.bytesToString());
+    log(data.toString());
+    data['isSuccess'] = true;
+    return data;
+  } else {
+    Map<String, dynamic> data =
+        jsonDecode(await response.stream.bytesToString());
+    return {
+      'isSuccess': false,
+      'message': data['message'],
+    };
+  }
+}
+
 Future register(Map request) async {
   return await (handleResponse(await buildHttpResponse('signup',
       request: request, method: HttpMethod.POST)));

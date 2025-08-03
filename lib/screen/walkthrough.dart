@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
+import 'package:stoneindia/main.dart';
+import 'package:stoneindia/screen/SBCustomer/sbcustomerblock.dart';
 import 'package:stoneindia/screen/signup.dart';
+import 'package:stoneindia/utils/restapi.dart';
 import 'package:stoneindia/utils/s_navigate.dart';
 
 class WalkThroughModel {
@@ -22,6 +25,7 @@ class WalkThroughScreen extends StatefulWidget {
 class _WalkThroughScreenState extends State<WalkThroughScreen> {
   var selectedIndex = 0;
   PageController pageController = PageController();
+  bool isLoginFirst = false;
 
   List<WalkThroughModel> list = [];
 
@@ -49,6 +53,11 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
       title: 'The Marble Collection',
       subTitle: 'Unleash the Elegance of Natural Stone.',
     ));
+
+    Map<String, dynamic> responseData = await authPermissionAPI();
+    if (responseData['isSuccess'] == true) {
+      isLoginFirst = responseData['login-first'];
+    }
   }
 
   @override
@@ -141,7 +150,9 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                   setValue(IS_WALKTHROUGH_FIRST, true);
                   // const SignUpScreen().launch(context);
                   StoneNavigate.to(
-                    const SignUpScreen(),
+                    flowStats['login-first'] == true
+                        ? const SignUpScreen()
+                        : const SBCustomerBlockScreen(),
                   );
                 }),
                 secondChild: const SizedBox(),
@@ -193,7 +204,12 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                 () {
                   setValue(IS_WALKTHROUGH_FIRST, true);
                   // const SignUpScreen().launch(context);
-                  StoneNavigate.to(const SignUpScreen());
+
+                  StoneNavigate.to(
+                    flowStats['login-first'] == true
+                        ? const SignUpScreen()
+                        : const SBCustomerBlockScreen(),
+                  );
                 },
               ),
             ),

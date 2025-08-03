@@ -7,6 +7,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
+import 'package:stoneindia/main.dart';
 import 'dart:developer' as dev;
 import 'package:stoneindia/screen/SBTeam/sbteamdashboard.dart';
 import 'package:stoneindia/screen/otpscreen.dart';
@@ -37,13 +38,26 @@ class _SignInScreenState extends State<SignInScreen> {
   String country_iso_code = 'IN';
   bool isValidNumber = false;
   final translator = GoogleTranslator();
+  bool isLoginFirst = flowStats['login-first'] ?? false;
 
   @override
   void initState() {
     super.initState();
     isfirst = widget.isfirst ?? false;
     print("ISFIRST: $isfirst");
+
+    getLoginFirst();
     init();
+  }
+
+  Future<void> getLoginFirst() async {
+    Map<String, dynamic> responseData = await authPermissionAPI();
+    if (responseData['isSuccess'] == true) {
+      log("isLoginFirst: $responseData");
+      isLoginFirst = responseData['login-first'];
+      log("isLoginFirst: $isLoginFirst");
+    }
+    setState(() {});
   }
 
   init() async {
@@ -311,7 +325,12 @@ class _SignInScreenState extends State<SignInScreen> {
                               number = phone.completeNumber;
                               country_code = phone.countryCode;
                               country_iso_code = phone.countryISOCode;
-                              isValidNumber = phone.isValidNumber();
+                              try {
+                                isValidNumber = phone.isValidNumber();
+                              } catch (e) {
+                                log("Error validating number: $e");
+                                isValidNumber = false;
+                              }
                             });
                           },
                         ),
@@ -344,6 +363,21 @@ class _SignInScreenState extends State<SignInScreen> {
                                   isLoading = true;
                                 });
 
+                                bool authPermissionGranted = false;
+
+                                Map<String, dynamic> authPermissionResult =
+                                    await authPermissionAPI();
+
+                                if (authPermissionResult['isSuccess'] == true) {
+                                  if (!authPermissionResult['phone-auth']) {
+                                    saveForm();
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    return;
+                                  }
+                                }
+
                                 Map req = {
                                   'whatsapp_number':
                                       number.toString().replaceAll("+", ""),
@@ -359,8 +393,18 @@ class _SignInScreenState extends State<SignInScreen> {
                                 dev.log(req.toString(), name: "Login Request");
                                 await login(req).then((value) async {
                                   if (value["status"] == false) {
-                                    toast(
-                                        "Can't login with this number!, maybe you are not registered yet.");
+                                    // toast(
+                                    //     "Can't login with this number!, maybe you are not registered yet.");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: const Text(
+                                            "Can't login with this number!, maybe you are not registered yet."),
+                                        action: SnackBarAction(
+                                          label: 'OK',
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                    );
                                     setState(() {
                                       isLoading = false;
                                     });
@@ -399,10 +443,16 @@ class _SignInScreenState extends State<SignInScreen> {
                                         ),
                                       ),
                                     );
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                     print("OTP Sent");
                                   },
                                   codeAutoRetrievalTimeout:
                                       (String verificationId) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                     print("Timeout");
                                   },
                                   //
@@ -413,9 +463,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                     isLoading = false;
                                   });
                                 });
-                                setState(() {
-                                  isLoading = false;
-                                });
+                                // setState(() {
+                                //   isLoading = false;
+                                // });
 
                                 // saveForm();
                               },
@@ -450,22 +500,25 @@ class _SignInScreenState extends State<SignInScreen> {
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // pop context
-                      // const SBCustomerDashboard()
-                      //     .launch(context, isNewTask: true);
+                Visibility(
+                  visible: !isLoginFirst,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // pop context
+                        // const SBCustomerDashboard()
+                        //     .launch(context, isNewTask: true);
 
-                      StoneNavigate.toAndRemoveUntil(
-                        const SBCustomerDashboard(),
-                      );
-                    },
-                    child: Text(
-                      "Skip",
-                      style: primaryTextStyle(
-                          size: 16, color: black, weight: FontWeight.bold),
+                        StoneNavigate.toAndRemoveUntil(
+                          const SBCustomerDashboard(),
+                        );
+                      },
+                      child: Text(
+                        "Skip",
+                        style: primaryTextStyle(
+                            size: 16, color: black, weight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
