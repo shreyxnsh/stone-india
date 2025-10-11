@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:carousel_slider/carousel_controller.dart' as cs;
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -31,12 +29,12 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
   TextEditingController nameCont = TextEditingController();
   FocusNode nameFocus = FocusNode();
   bool is_long_press = false;
-  String _image = "";
-  final cs.CarouselController _controller = cs.CarouselController();
+  late final CarouselSliderController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = CarouselSliderController();
     init();
   }
 
@@ -164,24 +162,12 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
                             print('Long Press Begin');
                             setState(() {
                               is_long_press = true;
-                              _image = holdlist[index]
-                                      .images!
-                                      .first
-                                      .image
-                                      .validate() ??
-                                  '';
                             });
                           },
                           onLongPressEnd: (details) {
                             print('Long Press End');
                             setState(() {
                               is_long_press = false;
-                              _image = holdlist[index]
-                                      .images!
-                                      .first
-                                      .image
-                                      .validate() ??
-                                  '';
                             });
                           },
                           onTap: () {
@@ -218,14 +204,6 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
                                             ),
                                             itemBuilder: (context,
                                                 int indexdata, realIdx) {
-                                              final int count = holdlist[index]
-                                                          .images!
-                                                          .length >
-                                                      10
-                                                  ? 10
-                                                  : holdlist[index]
-                                                      .images!
-                                                      .length;
                                               return ListView(
                                                   scrollDirection:
                                                       Axis.horizontal,
@@ -273,12 +251,11 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
                                                               child:
                                                                   CachedVideoWidget(
                                                                 url: holdlist[
-                                                                            index]
-                                                                        .images![
-                                                                            indexdata]
-                                                                        .image
-                                                                        .validate() ??
-                                                                    '',
+                                                                        index]
+                                                                    .images![
+                                                                        indexdata]
+                                                                    .image
+                                                                    .validate(),
                                                                 height: 300,
                                                                 width: MediaQuery.of(
                                                                             context)
@@ -572,7 +549,7 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
             ),
             5.height,
             holdblock(context).visible(
-              holdlist != null,
+              holdlist.isNotEmpty,
               defaultWidget: const NoDataFoundWidget(iconSize: 120).center(),
             ),
           ]),
@@ -676,41 +653,6 @@ class _CustomerHoldScreenState extends State<CustomerHoldScreen> {
       setState(() {
         isLoading = false;
       });
-    });
-  }
-
-  Future _reload() async {
-    await fetchcustomerholdblockform(
-            last_id: last_id, user_id: getIntAsync(USER_ID))
-        .then((value) {
-      if (value.blockFormData != null) {
-        if (value.blockFormData!.isNotEmpty) {
-          List<BlockFormData> blockFormData = [];
-          for (var element in value.blockFormData!) {
-            blockFormData.add(BlockFormData(
-              id: element.id,
-              block_name: element.block_name,
-              product_name: element.product_name,
-              category_name: element.category_name,
-              form_type: element.form_type,
-              slab_type_name: element.slab_type_name,
-              slab_height: element.slab_height,
-              slab_length: element.slab_length,
-              slab_thickness: element.slab_thickness,
-              total_slabs: element.total_slabs,
-              form_status: element.form_status,
-              images: element.images == null ? [] : element.images!.toList(),
-            ));
-          }
-          if (blockFormData.isNotEmpty) {
-            setState(() {
-              holdlist = (blockFormData ?? []) + (holdlist ?? []);
-            });
-          }
-        }
-      }
-    }).catchError((e) {
-      print(e.toString());
     });
   }
 

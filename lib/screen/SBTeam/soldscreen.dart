@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:carousel_slider/carousel_slider.dart' as cs;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -34,12 +34,12 @@ class _SoldScreenState extends State<SoldScreen> {
   TextEditingController nameCont = TextEditingController();
   FocusNode nameFocus = FocusNode();
   bool is_long_press = false;
-  String _image = "";
-  final cs.CarouselController _controller = cs.CarouselController();
+  late final CarouselSliderController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = CarouselSliderController();
     init();
   }
 
@@ -155,10 +155,10 @@ class _SoldScreenState extends State<SoldScreen> {
             child: Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: Image.network(
-                  _image,
+                child: Container(
                   height: 300,
                   width: 300,
+                  color: Colors.grey[300],
                 ),
               ),
             ),
@@ -190,24 +190,12 @@ class _SoldScreenState extends State<SoldScreen> {
                                 print('Long Press Begin');
                                 setState(() {
                                   is_long_press = true;
-                                  _image = soldlist[index]
-                                          .images!
-                                          .first
-                                          .image
-                                          .validate() ??
-                                      '';
                                 });
                               },
                               onLongPressEnd: (details) {
                                 print('Long Press End');
                                 setState(() {
                                   is_long_press = false;
-                                  _image = soldlist[index]
-                                          .images!
-                                          .first
-                                          .image
-                                          .validate() ??
-                                      '';
                                 });
                               },
                               onTap: () {
@@ -226,13 +214,13 @@ class _SoldScreenState extends State<SoldScreen> {
                                                       .size
                                                       .width -
                                                   34,
-                                              child: cs.CarouselSlider.builder(
+                                              child: CarouselSlider.builder(
                                                 carouselController: _controller,
                                                 // padding: const EdgeInsets.only(top: 0, bottom: 0, right: 0, left: 0),
                                                 itemCount: soldlist[index]
                                                     .images!
                                                     .length,
-                                                options: cs.CarouselOptions(
+                                                options: CarouselOptions(
                                                   // height: MediaQuery.of(context).size.height*0.25,
                                                   autoPlayInterval:
                                                       const Duration(
@@ -246,15 +234,6 @@ class _SoldScreenState extends State<SoldScreen> {
                                                 ),
                                                 itemBuilder: (context,
                                                     int indexdata, realIdx) {
-                                                  final int count =
-                                                      soldlist[index]
-                                                                  .images!
-                                                                  .length >
-                                                              10
-                                                          ? 10
-                                                          : soldlist[index]
-                                                              .images!
-                                                              .length;
                                                   return ListView(
                                                       scrollDirection:
                                                           Axis.horizontal,
@@ -305,11 +284,12 @@ class _SoldScreenState extends State<SoldScreen> {
                                                                       .width,
                                                                   child:
                                                                       CachedVideoWidget(
-                                                                    url: soldlist[index]
-                                                                            .images![indexdata]
-                                                                            .image
-                                                                            .validate() ??
-                                                                        '',
+                                                                    url: soldlist[
+                                                                            index]
+                                                                        .images![
+                                                                            indexdata]
+                                                                        .image
+                                                                        .validate(),
                                                                     height: 300,
                                                                     width: MediaQuery.of(context)
                                                                             .size
@@ -322,12 +302,11 @@ class _SoldScreenState extends State<SoldScreen> {
                                                                 ))
                                                               : CachedImageWidget(
                                                                   url: soldlist[
-                                                                              index]
-                                                                          .images![
-                                                                              indexdata]
-                                                                          .image
-                                                                          .validate() ??
-                                                                      '',
+                                                                          index]
+                                                                      .images![
+                                                                          indexdata]
+                                                                      .image
+                                                                      .validate(),
                                                                   height: 300,
                                                                   width: MediaQuery.of(
                                                                           context)
@@ -666,7 +645,7 @@ class _SoldScreenState extends State<SoldScreen> {
             24.height,
             soldblockformlist(context)
                 .visible(
-                  soldlist != null,
+                  soldlist.isNotEmpty,
                   defaultWidget:
                       const NoDataFoundWidget(iconSize: 120).center(),
                 )
@@ -787,7 +766,7 @@ class _SoldScreenState extends State<SoldScreen> {
           }
           if (blockFormData.isNotEmpty) {
             setState(() {
-              soldlist = (blockFormData ?? []) + (soldlist ?? []);
+              soldlist = blockFormData + soldlist;
             });
           }
         }

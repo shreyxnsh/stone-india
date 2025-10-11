@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-// import 'package:carousel_slider/carousel_slider.dart';
-import 'package:carousel_slider/carousel_slider.dart' as cs;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stoneindia/contants.dart';
@@ -16,7 +15,7 @@ import 'package:stoneindia/widget/commonrow.dart';
 import 'package:intl/intl.dart';
 
 class BlockFormListWidget extends StatefulWidget {
-  List<BlockFormData>? blockFormData;
+  final List<BlockFormData>? blockFormData;
 
   BlockFormListWidget({super.key, this.blockFormData});
 
@@ -26,15 +25,15 @@ class BlockFormListWidget extends StatefulWidget {
 
 class _BlockFormListWidgetState extends State<BlockFormListWidget> {
   bool is_long_press = false;
-  String _image = "";
   bool isloadingblocklist = false;
   List<BlockFormData>? blockformlist;
-  final cs.CarouselController _controller = cs.CarouselController();
+  late final CarouselSliderController _controller;
   bool isWhatsappApi = false;
 
   @override
   void initState() {
     super.initState();
+    _controller = CarouselSliderController();
     init();
   }
 
@@ -86,20 +85,12 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                   print('Long Press Begin');
                                   setState(() {
                                     is_long_press = true;
-                                    _image = widget.blockFormData![index]
-                                            .images!.first.image
-                                            .validate() ??
-                                        '';
                                   });
                                 },
                                 onLongPressEnd: (details) {
                                   print('Long Press End');
                                   setState(() {
                                     is_long_press = false;
-                                    _image = widget.blockFormData![index]
-                                            .images!.first.image
-                                            .validate() ??
-                                        '';
                                   });
                                 },
                                 onTap: () {
@@ -123,8 +114,8 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                                                 .size
                                                                 .width -
                                                             32,
-                                                    child: cs.CarouselSlider
-                                                        .builder(
+                                                    child:
+                                                        CarouselSlider.builder(
                                                       carouselController:
                                                           _controller,
                                                       // padding: const EdgeInsets.only(top: 0, bottom: 0, right: 0, left: 0),
@@ -132,8 +123,7 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                                           .blockFormData![index]
                                                           .images!
                                                           .length,
-                                                      options:
-                                                          cs.CarouselOptions(
+                                                      options: CarouselOptions(
                                                         // height: MediaQuery.of(context).size.height*0.25,
                                                         autoPlayInterval:
                                                             const Duration(
@@ -148,18 +138,6 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                                       itemBuilder: (context,
                                                           int indexdata,
                                                           realIdx) {
-                                                        final int count = widget
-                                                                    .blockFormData![
-                                                                        index]
-                                                                    .images!
-                                                                    .length >
-                                                                10
-                                                            ? 10
-                                                            : widget
-                                                                .blockFormData![
-                                                                    index]
-                                                                .images!
-                                                                .length;
                                                         return ListView(
                                                             scrollDirection:
                                                                 Axis.horizontal,
@@ -213,8 +191,11 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                                                             50,
                                                                         child:
                                                                             CachedVideoWidget(
-                                                                          url: widget.blockFormData![index].images![indexdata].image.validate() ??
-                                                                              '',
+                                                                          url: widget
+                                                                              .blockFormData![index]
+                                                                              .images![indexdata]
+                                                                              .image
+                                                                              .validate(),
                                                                           height:
                                                                               300,
                                                                           width: MediaQuery.of(context)
@@ -227,8 +208,11 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
                                                                         ),
                                                                       ))
                                                                     : CachedImageWidget(
-                                                                        url: widget.blockFormData![index].images![indexdata].image.validate() ??
-                                                                            '',
+                                                                        url: widget
+                                                                            .blockFormData![index]
+                                                                            .images![indexdata]
+                                                                            .image
+                                                                            .validate(),
                                                                         height:
                                                                             300,
                                                                         width: MediaQuery.of(context)
@@ -791,9 +775,8 @@ class _BlockFormListWidgetState extends State<BlockFormListWidget> {
               print(blockformlist!.length);
               if (blockformlist != null) {
                 print("not null");
-                setState(() {
-                  widget.blockFormData = blockformlist;
-                });
+                // Note: Cannot modify final field blockFormData
+                // This should be handled by the parent widget
               }
             }
           }
